@@ -16,7 +16,7 @@ const menuItems = [
   { label: "Product Management", icon: FiBox, path: "/admin/" },
   { label: "More Page", icon: FiFileText, path: "/admin/morepage" },
   { label: "Footer Settings", icon: FiSettings, path: "/admin/footer" },
-  { label: "Account Profile", icon: FiUser, path: "/admin/profile" },
+  { label: "Change Password", icon: FiLock, path: "/admin/profile" },
 ];
 
 export default function Sidebar() {
