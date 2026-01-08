@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RiSearchLine } from 'react-icons/ri';
-import { HiOutlineShoppingBag, HiMenu } from 'react-icons/hi';
+import { HiMenu, HiOutlineLockClosed } from 'react-icons/hi';
 import { IoClose } from 'react-icons/io5';
 import {
   Sheet,
@@ -45,20 +45,27 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
+            {/* Desktop Admin Login Link */}
+            <Link
+              to="/admin/login"
+              className="group flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.25em] text-zinc-300 hover:text-black transition-all duration-300 border-l border-zinc-100 pl-10 ml-2"
+            >
+              <HiOutlineLockClosed className="text-sm group-hover:scale-110 transition-transform" />
+              Admin
+            </Link>
           </div>
 
-          {/* Right Section */}
+          {/* Right Section / Mobile Toggle */}
           <div className="flex items-center gap-4">
-            {/* Search (Optional/Hidden for minimal look) */}
-            <button className="p-2 text-zinc-400 hover:text-black transition-colors md:block hidden">
-              <RiSearchLine className="w-5 h-5" />
-            </button>
-
             {/* Mobile Menu Trigger */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <button className="lg:hidden p-2 hover:bg-zinc-50 rounded-lg transition-colors">
-                  <HiMenu className="w-6 h-6 text-black" />
+                <button className="lg:hidden p-2 hover:bg-zinc-50 rounded-lg transition-all duration-300">
+                  {isOpen ? (
+                    <IoClose className="w-7 h-7 text-black transition-all animate-in zoom-in spin-in-180" />
+                  ) : (
+                    <HiMenu className="w-7 h-7 text-black transition-all" />
+                  )}
                 </button>
               </SheetTrigger>
               <SheetContent side="right" className="w-full sm:w-[400px] p-0 border-l border-zinc-100">
@@ -67,12 +74,12 @@ const Navbar = () => {
                     <span className="font-black text-xs uppercase tracking-widest text-zinc-400">Navigation</span>
                     <SheetClose asChild>
                       <button className="p-2 hover:bg-zinc-50 rounded-full transition-colors">
-                        <IoClose className="w-6 h-6 text-black" />
+                        <IoClose className="w-7 h-7 text-black" />
                       </button>
                     </SheetClose>
                   </div>
 
-                  <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-6">
                     {navLinks.map((link) => (
                       <Link
                         key={link.name}
@@ -83,9 +90,19 @@ const Navbar = () => {
                         {link.name}
                       </Link>
                     ))}
+
+                    {/* Mobile Admin Login Link */}
+                    <Link
+                      to="/admin/login"
+                      onClick={() => setIsOpen(false)}
+                      className="mt-8 flex items-center gap-3 text-sm font-black uppercase tracking-[0.2em] text-zinc-400 hover:text-black transition-all"
+                    >
+                      <HiOutlineLockClosed className="text-xl" />
+                      Admin Login
+                    </Link>
                   </div>
 
-                  <div className="mt-auto pt-10 border-t border-zinc-100">
+                  <div className="mt-auto pt-10 border-t border-zinc-100 flex flex-col gap-4">
                     <p className="text-[10px] font-bold text-zinc-300 uppercase tracking-widest leading-loose">
                       The Archive © 2025<br />
                       Curated Objects of History
