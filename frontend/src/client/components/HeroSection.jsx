@@ -4,18 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 const HeroSection = () => {
   const navigate = useNavigate();
 
-  const handleExploreArchive = () => {
-    // Scroll to products section smoothly
-    const productsSection = document.getElementById('products-showcase');
-    if (productsSection) {
-      productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-      // Fallback: scroll down by viewport height
-      window.scrollTo({
-        top: window.innerHeight - 100,
-        behavior: 'smooth'
-      });
-    }
+  const handleExploreCategories = () => {
+    navigate('/category');
   };
 
   return (
@@ -51,10 +41,10 @@ const HeroSection = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <button
-                onClick={handleExploreArchive}
+                onClick={handleExploreCategories}
                 className="bg-black text-white px-8 py-3.5 text-xs font-bold uppercase tracking-[0.15em] hover:bg-[#333333] transition-colors text-center cursor-pointer"
               >
-                Explore Archive
+                Explore Categories
               </button>
               <Link
                 to="/latest"

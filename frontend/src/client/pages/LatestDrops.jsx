@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiCalendar } from 'react-icons/fi';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const LatestDrops = () => {
-    const [products, setProducts] = useState([]);
+    const [collections, setCollections] = useState({ currentMonth: null, previousMonth: null });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetchLatestProducts();
+        fetchLatestDrops();
     }, []);
 
-    const fetchLatestProducts = async () => {
+    const fetchLatestDrops = async () => {
         try {
             setLoading(true);
-            // Fetch the 20 most recently added products
-            const response = await fetch(`${API_URL}/products?limit=20&sortBy=newest`);
+            const response = await fetch(`${API_URL}/products/featured/monthly?limit=20`);
             const result = await response.json();
 
             if (result.success) {
-                setProducts(result.data);
+                setCollections(result.data);
             } else {
                 setError('Failed to load products');
             }
@@ -46,19 +45,6 @@ const LatestDrops = () => {
 
     const formatPrice = (price) => `$${price?.toFixed(0) || '0'}`;
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffTime = Math.abs(now - date);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 0) return 'Today';
-        if (diffDays === 1) return 'Yesterday';
-        if (diffDays < 7) return `${diffDays} days ago`;
-        if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    };
-
     if (loading) {
         return (
             <div className="min-h-screen bg-white flex items-center justify-center">
@@ -67,18 +53,7 @@ const LatestDrops = () => {
         );
     }
 
-    if (error) {
-        return (
-            <div className="min-h-screen bg-white flex items-center justify-center">
-                <div className="text-center">
-                    <p className="text-red-500 text-xl mb-4">{error}</p>
-                    <button onClick={fetchLatestProducts} className="bg-black text-white px-6 py-2 rounded-full">
-                        Retry
-                    </button>
-                </div>
-            </div>
-        );
-    }
+    const hasProducts = (collections.currentMonth?.products.length > 0) || (collections.previousMonth?.products.length > 0);
 
     return (
         <div className="min-h-screen bg-white">
@@ -103,67 +78,103 @@ const LatestDrops = () => {
                     </div>
                     <h1 className="text-5xl font-bold text-black mb-4">Latest Drops</h1>
                     <p className="text-lg text-gray-600 max-w-2xl">
-                        Discover the newest additions to our curated collection. These are the most recently added products,
-                        fresh off our curation desk.
+                        Discover the newest additions from the last two months. These are the most recently added products to our curated collection.
                     </p>
                 </div>
 
-                {/* Products Grid */}
-                {products.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-                        {products.map((product, index) => (
-                            <Link
-                                key={product._id}
-                                to={`/product/${product._id}`}
-                                className="group block relative"
-                            >
-                                {/* New Badge for first 5 items */}
-                                {index < 5 && (
-                                    <div className="absolute top-3 left-3 z-10 bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wide">
-                                        New
-                                    </div>
-                                )}
-
-                                <div className="bg-[#F4F4F4] aspect-square overflow-hidden mb-4 flex items-center justify-center">
-                                    <img
-                                        src={getImageUrl(product)}
-                                        alt={product.name}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
+                {hasProducts ? (
+                    <div className="space-y-16">
+                        {/* Current Month */}
+                        {collections.currentMonth?.products.length > 0 && (
+                            <div>
+                                <div className="flex items-center gap-4 mb-8">
+                                    <h2 className="text-3xl font-bold">{collections.currentMonth.month}</h2>
+                                    <span className="px-3 py-1 bg-black text-white text-[10px] font-bold rounded uppercase tracking-wider">Present</span>
                                 </div>
-
-                                <div className="space-y-1">
-                                    <div className="flex items-start justify-between gap-2">
-                                        <h3 className="font-semibold text-base text-black group-hover:text-gray-600 transition-colors line-clamp-2">
-                                            {product.name}
-                                        </h3>
-                                        <span className="font-bold text-base text-black whitespace-nowrap">
-                                            {formatPrice(product.price)}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <p className="text-sm text-gray-500">{product.category}</p>
-                                        <span className="text-xs text-gray-400">
-                                            {formatDate(product.createdAt)}
-                                        </span>
-                                    </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                                    {collections.currentMonth.products.map((product) => (
+                                        <Link
+                                            key={product._id}
+                                            to={`/product/${product._id}`}
+                                            className="group block"
+                                        >
+                                            <div className="bg-[#F4F4F4] aspect-square overflow-hidden mb-4 flex items-center justify-center rounded-lg">
+                                                <img
+                                                    src={getImageUrl(product)}
+                                                    alt={product.name}
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <div className="flex items-start justify-between gap-2">
+                                                    <h3 className="font-semibold text-base text-black group-hover:text-gray-600 transition-colors line-clamp-2">
+                                                        {product.name}
+                                                    </h3>
+                                                    <span className="font-bold text-base text-black whitespace-nowrap">
+                                                        {formatPrice(product.price)}
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm text-gray-500">{product.category}</p>
+                                            </div>
+                                        </Link>
+                                    ))}
                                 </div>
-                            </Link>
-                        ))}
+                            </div>
+                        )}
+
+                        {/* Previous Month */}
+                        {collections.previousMonth?.products.length > 0 && (
+                            <div>
+                                <div className="flex items-center gap-4 mb-8">
+                                    <h2 className="text-3xl font-bold text-gray-400">{collections.previousMonth.month}</h2>
+                                    <span className="text-gray-400 text-sm">{collections.previousMonth.year}</span>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                                    {collections.previousMonth.products.map((product) => (
+                                        <Link
+                                            key={product._id}
+                                            to={`/product/${product._id}`}
+                                            className="group block opacity-90 hover:opacity-100 transition-opacity"
+                                        >
+                                            <div className="bg-[#F4F4F4] aspect-square overflow-hidden mb-4 flex items-center justify-center rounded-lg">
+                                                <img
+                                                    src={getImageUrl(product)}
+                                                    alt={product.name}
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <div className="flex items-start justify-between gap-2">
+                                                    <h3 className="font-semibold text-base text-black group-hover:text-gray-600 transition-colors line-clamp-2">
+                                                        {product.name}
+                                                    </h3>
+                                                    <span className="font-bold text-base text-black whitespace-nowrap">
+                                                        {formatPrice(product.price)}
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm text-gray-500">{product.category}</p>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 ) : (
-                    <div className="text-center py-20">
-                        <p className="text-xl text-gray-500">No products found</p>
+                    <div className="text-center py-20 border-2 border-dashed border-gray-100 rounded-3xl">
+                        <FiCalendar className="w-12 h-12 text-gray-200 mx-auto mb-4" />
+                        <p className="text-xl text-gray-400">No new drops in the last 2 months</p>
+                        <Link to="/allproducts" className="text-black font-semibold mt-4 inline-block hover:underline">Explore complete archive</Link>
                     </div>
                 )}
 
                 {/* View All Link */}
-                <div className="mt-12 text-center">
+                <div className="mt-16 text-center">
                     <Link
                         to="/allproducts"
                         className="inline-flex items-center gap-2 bg-black text-white px-8 py-3.5 font-medium hover:bg-gray-800 transition-colors rounded-full"
                     >
-                        View All Products
+                        View Full Archive
                     </Link>
                 </div>
             </div>

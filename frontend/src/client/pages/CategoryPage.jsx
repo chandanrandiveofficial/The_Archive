@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiHeart, FiChevronDown } from 'react-icons/fi';
+import { FiChevronDown } from 'react-icons/fi';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -191,10 +191,7 @@ const CategoryPage = () => {
                 to={`/product/${product._id}`}
                 className="group relative"
               >
-                {/* Wishlist Heart */}
-                <button className="absolute top-3 right-3 z-10 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-gray-100 transition-colors">
-                  <FiHeart className="w-4 h-4" />
-                </button>
+
 
                 {/* Badges */}
                 {product.visibility?.bestSelling && (
