@@ -61,8 +61,8 @@ const ProductDetail = () => {
     if (product?.images && product.images.length > 0) {
       return product.images.map(img => {
         const url = img.url;
-        // Handle base64, absolute paths, http URLs, and relative paths
-        if (url.startsWith('data:') || url.startsWith('/') || url.startsWith('http')) {
+        // Handle base64, absolute paths, http URLs, blobs and relative paths
+        if (url.startsWith('data:') || url.startsWith('/') || url.startsWith('http') || url.startsWith('blob:')) {
           return url;
         }
         return `/${url}`;
@@ -74,8 +74,8 @@ const ProductDetail = () => {
   const getImageUrl = (product) => {
     if (product?.images && product.images.length > 0) {
       const url = product.images[0].url;
-      // Handle base64, absolute paths, http URLs, and relative paths
-      if (url.startsWith('data:') || url.startsWith('/') || url.startsWith('http')) {
+      // Handle base64, absolute paths, http URLs, blobs and relative paths
+      if (url.startsWith('data:') || url.startsWith('/') || url.startsWith('http') || url.startsWith('blob:')) {
         return url;
       }
       return `/${url}`;

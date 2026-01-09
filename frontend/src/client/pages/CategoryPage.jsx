@@ -82,7 +82,7 @@ const CategoryPage = () => {
   const getImageUrl = (product) => {
     if (product.images && product.images.length > 0) {
       const url = product.images[0].url;
-      if (url.startsWith('data:') || url.startsWith('/') || url.startsWith('http')) {
+      if (url.startsWith('data:') || url.startsWith('/') || url.startsWith('http') || url.startsWith('blob:')) {
         return url;
       }
       return `/${url}`;

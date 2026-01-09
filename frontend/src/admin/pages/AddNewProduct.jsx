@@ -54,15 +54,19 @@ export default function AddNewProduct() {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    const mapped = files.map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-    }));
-    setImages((prev) => [...prev, ...mapped]);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImages(prev => [...prev, {
+          file,
+          preview: reader.result, // base64 string
+        }]);
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
   const removeImage = (index) => {
-    URL.revokeObjectURL(images[index].preview);
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -212,13 +216,15 @@ export default function AddNewProduct() {
                             onChange={(e) => {
                               const file = e.target.files[0];
                               if (file) {
-                                URL.revokeObjectURL(images[index].preview);
-                                const newPreview = URL.createObjectURL(file);
-                                setImages(prev => {
-                                  const newImages = [...prev];
-                                  newImages[index] = { file, preview: newPreview };
-                                  return newImages;
-                                });
+                                const reader = new FileReader();
+                                reader.onloadend = () => {
+                                  setImages(prev => {
+                                    const newImages = [...prev];
+                                    newImages[index] = { file, preview: reader.result };
+                                    return newImages;
+                                  });
+                                };
+                                reader.readAsDataURL(file);
                               }
                             }}
                           />

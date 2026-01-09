@@ -40,7 +40,7 @@ const Footer = () => {
 
   const getImageUrl = (url) => {
     if (!url) return '/hero.png';
-    if (url.startsWith('data:') || url.startsWith('/') || url.startsWith('http')) {
+    if (url.startsWith('data:') || url.startsWith('/') || url.startsWith('http') || url.startsWith('blob:')) {
       return url;
     }
     return `/${url}`;
