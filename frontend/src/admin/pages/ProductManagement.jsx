@@ -36,6 +36,7 @@ const ProductManagement = () => {
     const [sortBy, setSortBy] = useState('newest');
     const [expandedYears, setExpandedYears] = useState({});
     const [products, setProducts] = useState([]);
+    const [statusFilter, setStatusFilter] = useState('');
     const [stats, setStats] = useState({ total: 0, published: 0, hidden: 0 });
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -45,7 +46,7 @@ const ProductManagement = () => {
     useEffect(() => {
         fetchProducts();
         fetchStats();
-    }, [sortBy]);
+    }, [sortBy, statusFilter]);
 
 
     const getAuthToken = () => localStorage.getItem('token');
@@ -55,7 +56,7 @@ const ProductManagement = () => {
         try {
             setLoading(true);
             const token = getAuthToken();
-            const response = await fetch(`${API_URL}/products?limit=200&sortBy=${sortBy}&status=`, {
+            const response = await fetch(`${API_URL}/products?limit=200&sortBy=${sortBy}&status=${statusFilter}`, {
                 headers: token ? { Authorization: `Bearer ${token}` } : {}
             });
             const result = await response.json();
@@ -303,11 +304,21 @@ const ProductManagement = () => {
                                 className="pl-10"
                             />
                         </div>
+                        <Select value={statusFilter} onValueChange={setStatusFilter}>
+                            <SelectTrigger className="w-full sm:w-[150px]">
+                                <SelectValue placeholder="Status" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-white border border-gray-200">
+                                <SelectItem value="">All Status</SelectItem>
+                                <SelectItem value="Active">Published</SelectItem>
+                                <SelectItem value="Hidden">Hidden</SelectItem>
+                            </SelectContent>
+                        </Select>
                         <Select value={sortBy} onValueChange={setSortBy}>
                             <SelectTrigger className="w-full sm:w-[180px]">
                                 <SelectValue placeholder="Sort by" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-white border border-gray-200">
                                 <SelectItem value="newest">Sort: Newest</SelectItem>
                                 <SelectItem value="oldest">Sort: Oldest</SelectItem>
                                 <SelectItem value="price-high">Price: High to Low</SelectItem>
