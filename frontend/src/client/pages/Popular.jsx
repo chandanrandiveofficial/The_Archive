@@ -128,7 +128,7 @@ const Popular = () => {
               </button>
             ))}
           </div>
-          <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+          <button className="flex hidden items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
             <span>Sort by: Popularity</span>
             <FiChevronDown className="w-4 h-4" />
           </button>

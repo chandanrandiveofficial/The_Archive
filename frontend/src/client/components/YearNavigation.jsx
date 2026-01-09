@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const YearNavigation = () => {
-  const [activeYear, setActiveYear] = useState('2025');
-
   const years = [
     { id: '2025', label: '2025' },
     { id: '2024', label: '2024' },
@@ -15,20 +14,13 @@ const YearNavigation = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8 text-sm">
           {years.map((year) => (
-            <button
+            <Link
               key={year.id}
-              onClick={() => setActiveYear(year.id)}
-              className={`pb-3 pt-4 transition-colors relative whitespace-nowrap ${
-                activeYear === year.id
-                  ? 'font-bold text-black'
-                  : 'font-normal text-[#8E8E8E] hover:text-[#333333]'
-              }`}
+              to={`/allproducts?year=${year.id}`}
+              className="pb-3 pt-4 transition-colors relative whitespace-nowrap hover:text-black hover:underline underline-offset-4 flex-1 sm:flex-none text-center sm:text-left"
             >
               {year.label}
-              {activeYear === year.id && (
-                <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-black"></span>
-              )}
-            </button>
+            </Link>
           ))}
         </div>
       </div>

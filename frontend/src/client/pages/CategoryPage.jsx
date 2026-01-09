@@ -159,11 +159,30 @@ const CategoryPage = () => {
   const categories = [
     'All Categories',
     'Furniture',
-    'Lighting',
     'Accessories',
-    'Decor',
-    'Textiles',
-    'Electronics'
+    'Arts',
+    'Apps',
+    'Agriculture',
+    'Automative and Industrial',
+    'Baby, Kids & Parenting',
+    'Beauty, Personal Care & Wellness',
+    'B2B, Industrial & Manufacturing',
+    'D2C Brands & Consumer Products',
+    'Fashion, Apparel & Accessories',
+    'Entertainment',
+    'Education, Learning & EdTech',
+    'Electric Vehicles, Mobility & Transport',
+    'Food, Beverage & FMCG',
+    'Health, Fitness & Medical',
+    'Home, Kitchen & Lifestyle',
+    'Services & Marketplaces',
+    'Sustainability & Green Products',
+    'Sports & Outdoor',
+    'Gift',
+    'Tech & Electronics',
+    'Miscellaneous',
+    'Lighting',
+    'Decor'
   ];
 
   // Filter products based on selected category
@@ -202,7 +221,7 @@ const CategoryPage = () => {
           </div>
 
           {/* Sort By */}
-          <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+          <button className="flex hidden items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
             <span>Sort by: Relevance</span>
             <FiChevronDown className="w-4 h-4" />
           </button>
