@@ -27,7 +27,9 @@ import { IoRefresh } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import DeleteAlertModal from '../components/DeleteAlertModal';
 
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 
 const ProductManagement = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -39,12 +41,15 @@ const ProductManagement = () => {
     const navigate = useNavigate();
     const [deleteModal, setDeleteModal] = useState({ open: false, product: null });
 
+
     useEffect(() => {
         fetchProducts();
         fetchStats();
     }, [sortBy]);
 
+
     const getAuthToken = () => localStorage.getItem('token');
+
 
     const fetchProducts = async () => {
         try {
@@ -64,6 +69,7 @@ const ProductManagement = () => {
         }
     };
 
+
     const fetchStats = async () => {
         try {
             const token = getAuthToken();
@@ -78,6 +84,7 @@ const ProductManagement = () => {
             console.error('Error fetching stats:', err);
         }
     };
+
 
     const handleDelete = async (productId) => {
         try {
@@ -95,6 +102,7 @@ const ProductManagement = () => {
             console.error('Error deleting product:', err);
         }
     };
+
 
     const handleToggleVisibility = async (product, field) => {
         try {
@@ -115,6 +123,7 @@ const ProductManagement = () => {
             console.error('Error updating visibility:', err);
         }
     };
+
 
     const handleToggleStatus = async (product) => {
         try {
@@ -138,10 +147,12 @@ const ProductManagement = () => {
         }
     };
 
+
     // Group products by year and month
     const groupedProducts = products.reduce((acc, product) => {
         const year = product.year;
         const month = `${product.month.toUpperCase()} ${year}`;
+
 
         if (!acc[year]) {
             acc[year] = { total: 0, months: {} };
@@ -154,11 +165,13 @@ const ProductManagement = () => {
         return acc;
     }, {});
 
+
     // Filter products by search
     const filteredGroupedProducts = Object.keys(groupedProducts).reduce((acc, year) => {
         const yearData = groupedProducts[year];
         const filteredMonths = {};
         let total = 0;
+
 
         Object.keys(yearData.months).forEach(month => {
             const filtered = yearData.months[month].filter(p =>
@@ -170,19 +183,23 @@ const ProductManagement = () => {
             }
         });
 
+
         if (total > 0) {
             acc[year] = { total, months: filteredMonths };
         }
         return acc;
     }, {});
 
+
     const toggleYear = (year) => {
         setExpandedYears(prev => ({ ...prev, [year]: !prev[year] }));
     };
 
+
     const handleDeleteClick = (product) => {
         setDeleteModal({ open: true, product });
     };
+
 
     const handleDeleteConfirm = () => {
         if (deleteModal.product) {
@@ -190,6 +207,7 @@ const ProductManagement = () => {
         }
         setDeleteModal({ open: false, product: null });
     };
+
 
     const getImageUrl = (product) => {
         if (product.images && product.images.length > 0) {
@@ -202,6 +220,7 @@ const ProductManagement = () => {
         return '/hero.png';
     };
 
+
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -210,26 +229,28 @@ const ProductManagement = () => {
         );
     }
 
+
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-8">
-                    <div className="flex items-start justify-between mb-2">
+                    <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-2">
                         <div>
-                            <h1 className="text-3xl font-bold text-black mb-2">Product Inventory</h1>
+                            <h1 className="text-2xl sm:text-3xl font-bold text-black mb-2">Product Inventory</h1>
                             <p className="text-sm text-[#8E8E8E]">Overview of your product catalog organized by timeline.</p>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 w-full sm:w-auto">
                             <Button variant="ghost" size="icon" className="rounded-full" onClick={fetchProducts}>
                                 <IoRefresh className="w-5 h-5" />
                             </Button>
-                            <Button className="bg-black text-white hover:bg-[#333333] gap-2" onClick={() => navigate('/admin/add')}>
+                            <Button className="bg-black text-white hover:bg-[#333333] gap-2 flex-1 sm:flex-initial" onClick={() => navigate('/admin/add')}>
                                 <FiPlus className="w-4 h-4" />
                                 Add New Product
                             </Button>
                         </div>
                     </div>
                 </div>
+
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                     <div className="bg-white rounded-lg p-6 border border-gray-200">
@@ -267,6 +288,7 @@ const ProductManagement = () => {
                     </div>
                 </div>
 
+
                 <div className="bg-white rounded-lg p-4 border border-gray-200 mb-6">
                     <div className="flex flex-col sm:flex-row gap-4">
                         <div className="relative flex-1">
@@ -293,11 +315,12 @@ const ProductManagement = () => {
                     </div>
                 </div>
 
+
                 <div className="space-y-4">
                     {Object.keys(filteredGroupedProducts).sort((a, b) => b - a).map((year) => (
                         <Collapsible key={year} open={expandedYears[year]} onOpenChange={() => toggleYear(year)}>
                             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                                <CollapsibleTrigger className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <CollapsibleTrigger className="w-full px-4 sm:px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
                                     <div className="flex items-center gap-3">
                                         {expandedYears[year] ? <FiChevronDown className="w-5 h-5 text-gray-400" /> : <FiChevronRight className="w-5 h-5 text-gray-400" />}
                                         <h2 className="text-xl font-bold text-black">{year}</h2>
@@ -308,57 +331,124 @@ const ProductManagement = () => {
                                     <div className="border-t border-gray-200">
                                         {Object.keys(filteredGroupedProducts[year].months).map((month) => (
                                             <div key={month}>
-                                                <div className="px-6 py-3 bg-gray-50 border-b border-gray-200">
+                                                <div className="px-4 sm:px-6 py-3 bg-gray-50 border-b border-gray-200">
                                                     <h3 className="text-xs font-medium text-[#8E8E8E] uppercase tracking-wide">{month}</h3>
                                                 </div>
                                                 {filteredGroupedProducts[year].months[month].map((product) => (
-                                                    <div key={product._id} className="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0">
-                                                        <div className="flex items-center gap-4 flex-1">
-                                                            <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                                                                <img src={getImageUrl(product)} alt={product.name} className="w-full h-full object-cover" />
-                                                            </div>
-                                                            <div className="flex-1 min-w-0">
-                                                                <div className="flex items-center gap-2">
-                                                                    <h4 className="text-sm font-semibold text-black mb-1 truncate">{product.name}</h4>
-                                                                    {product.visibility?.bestSelling && <Badge className="bg-yellow-100 text-yellow-700 text-[10px]">Bestseller</Badge>}
-                                                                    {product.visibility?.editorsPick && <Badge className="bg-purple-100 text-purple-700 text-[10px]">Editor's Pick</Badge>}
+                                                    <div key={product._id} className="px-4 sm:px-6 py-4 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0">
+                                                        {/* Mobile Layout (< 640px) */}
+                                                        <div className="sm:hidden">
+                                                            <div className="flex items-start gap-3">
+                                                                {/* Product Image */}
+                                                                <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                                                                    <img src={getImageUrl(product)} alt={product.name} className="w-full h-full object-cover" />
                                                                 </div>
-                                                                <p className="text-xs text-[#8E8E8E]">{product.category}</p>
+
+                                                                {/* Product Info & Actions */}
+                                                                <div className="flex-1 min-w-0">
+                                                                    <div className="flex items-start justify-between gap-2 mb-2">
+                                                                        <div className="flex-1 min-w-0">
+                                                                            <h4 className="text-sm font-semibold text-black mb-1">{product.name}</h4>
+                                                                            <div className="flex flex-wrap items-center gap-1">
+                                                                                {product.visibility?.bestSelling && <Badge className="bg-yellow-100 text-yellow-700 text-[10px]">Bestseller</Badge>}
+                                                                                {product.visibility?.editorsPick && <Badge className="bg-purple-100 text-purple-700 text-[10px]">Editor's Pick</Badge>}
+                                                                            </div>
+                                                                        </div>
+                                                                        {/* Actions Menu - Mobile */}
+                                                                        <DropdownMenu>
+                                                                            <DropdownMenuTrigger asChild>
+                                                                                <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+                                                                                    <FiMoreVertical className="w-4 h-4" />
+                                                                                </Button>
+                                                                            </DropdownMenuTrigger>
+                                                                            <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
+                                                                                <DropdownMenuItem onClick={() => navigate(`/admin/edit?id=${product._id}`)} className="gap-2 cursor-pointer">
+                                                                                    <BiEdit className="w-4 h-4" /> Edit Product
+                                                                                </DropdownMenuItem>
+                                                                                <DropdownMenuItem onClick={() => handleToggleStatus(product)} className="gap-2 cursor-pointer">
+                                                                                    {product.status === 'Active' ? <BiHide className="w-4 h-4" /> : <BiShow className="w-4 h-4" />}
+                                                                                    {product.status === 'Active' ? 'Hide' : 'Show'}
+                                                                                </DropdownMenuItem>
+                                                                                <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'bestSelling')} className="gap-2 cursor-pointer">
+                                                                                    <FiStar className="w-4 h-4" />
+                                                                                    {product.visibility?.bestSelling ? 'Remove from Bestsellers' : 'Add to Bestsellers'}
+                                                                                </DropdownMenuItem>
+                                                                                <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'editorsPick')} className="gap-2 cursor-pointer">
+                                                                                    <FiStar className="w-4 h-4" />
+                                                                                    {product.visibility?.editorsPick ? "Remove from Editor's Pick" : "Add to Editor's Pick"}
+                                                                                </DropdownMenuItem>
+                                                                                <DropdownMenuItem className="gap-2 text-red-600 focus:text-red-600 cursor-pointer" onClick={() => handleDeleteClick(product)}>
+                                                                                    <BiTrash className="w-4 h-4" /> Delete
+                                                                                </DropdownMenuItem>
+                                                                            </DropdownMenuContent>
+                                                                        </DropdownMenu>
+                                                                    </div>
+                                                                    
+                                                                    <p className="text-xs text-[#8E8E8E] mb-2">{product.category}</p>
+
+                                                                    <div className="flex items-center justify-between">
+                                                                        <Badge variant={product.status === 'Active' ? 'default' : 'secondary'} className={product.status === 'Active' ? 'bg-green-100 text-green-700 hover:bg-green-100' : 'bg-gray-100 text-gray-600'}>
+                                                                            <span className="w-2 h-2 rounded-full bg-current mr-1.5"></span>
+                                                                            {product.status}
+                                                                        </Badge>
+                                                                        
+                                                                        <span className="text-base font-bold text-black">
+                                                                            ${product.price.toFixed(2)}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div className="flex items-center gap-6">
-                                                            <Badge variant={product.status === 'Active' ? 'default' : 'secondary'} className={product.status === 'Active' ? 'bg-green-100 text-green-700 hover:bg-green-100' : 'bg-gray-100 text-gray-600'}>
-                                                                <span className="w-2 h-2 rounded-full bg-current mr-1.5"></span>
-                                                                {product.status}
-                                                            </Badge>
-                                                            <span className="text-base font-bold text-black min-w-[100px] text-right">${product.price.toFixed(2)}</span>
-                                                            <DropdownMenu>
-                                                                <DropdownMenuTrigger asChild>
-                                                                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                                        <FiMoreVertical className="w-4 h-4" />
-                                                                    </Button>
-                                                                </DropdownMenuTrigger>
-                                                                <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
-                                                                    <DropdownMenuItem onClick={() => navigate(`/admin/edit?id=${product._id}`)} className="gap-2 cursor-pointer">
-                                                                        <BiEdit className="w-4 h-4" /> Edit Product
-                                                                    </DropdownMenuItem>
-                                                                    <DropdownMenuItem onClick={() => handleToggleStatus(product)} className="gap-2 cursor-pointer">
-                                                                        {product.status === 'Active' ? <BiHide className="w-4 h-4" /> : <BiShow className="w-4 h-4" />}
-                                                                        {product.status === 'Active' ? 'Hide' : 'Show'}
-                                                                    </DropdownMenuItem>
-                                                                    <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'bestSelling')} className="gap-2 cursor-pointer">
-                                                                        <FiStar className="w-4 h-4" />
-                                                                        {product.visibility?.bestSelling ? 'Remove from Bestsellers' : 'Add to Bestsellers'}
-                                                                    </DropdownMenuItem>
-                                                                    <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'editorsPick')} className="gap-2 cursor-pointer">
-                                                                        <FiStar className="w-4 h-4" />
-                                                                        {product.visibility?.editorsPick ? "Remove from Editor's Pick" : "Add to Editor's Pick"}
-                                                                    </DropdownMenuItem>
-                                                                    <DropdownMenuItem className="gap-2 text-red-600 focus:text-red-600 cursor-pointer" onClick={() => handleDeleteClick(product)}>
-                                                                        <BiTrash className="w-4 h-4" /> Delete
-                                                                    </DropdownMenuItem>
-                                                                </DropdownMenuContent>
-                                                            </DropdownMenu>
+
+                                                        {/* Desktop Layout (>= 640px) */}
+                                                        <div className="hidden sm:flex items-center justify-between">
+                                                            <div className="flex items-center gap-4 flex-1">
+                                                                <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                                                                    <img src={getImageUrl(product)} alt={product.name} className="w-full h-full object-cover" />
+                                                                </div>
+                                                                <div className="flex-1 min-w-0">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <h4 className="text-sm font-semibold text-black mb-1 truncate">{product.name}</h4>
+                                                                        {product.visibility?.bestSelling && <Badge className="bg-yellow-100 text-yellow-700 text-[10px]">Bestseller</Badge>}
+                                                                        {product.visibility?.editorsPick && <Badge className="bg-purple-100 text-purple-700 text-[10px]">Editor's Pick</Badge>}
+                                                                    </div>
+                                                                    <p className="text-xs text-[#8E8E8E]">{product.category}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div className="flex items-center gap-6">
+                                                                <Badge variant={product.status === 'Active' ? 'default' : 'secondary'} className={product.status === 'Active' ? 'bg-green-100 text-green-700 hover:bg-green-100' : 'bg-gray-100 text-gray-600'}>
+                                                                    <span className="w-2 h-2 rounded-full bg-current mr-1.5"></span>
+                                                                    {product.status}
+                                                                </Badge>
+                                                                <span className="text-base font-bold text-black min-w-[100px] text-right">${product.price.toFixed(2)}</span>
+                                                                <DropdownMenu>
+                                                                    <DropdownMenuTrigger asChild>
+                                                                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                                                                            <FiMoreVertical className="w-4 h-4" />
+                                                                        </Button>
+                                                                    </DropdownMenuTrigger>
+                                                                    <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
+                                                                        <DropdownMenuItem onClick={() => navigate(`/admin/edit?id=${product._id}`)} className="gap-2 cursor-pointer">
+                                                                            <BiEdit className="w-4 h-4" /> Edit Product
+                                                                        </DropdownMenuItem>
+                                                                        <DropdownMenuItem onClick={() => handleToggleStatus(product)} className="gap-2 cursor-pointer">
+                                                                            {product.status === 'Active' ? <BiHide className="w-4 h-4" /> : <BiShow className="w-4 h-4" />}
+                                                                            {product.status === 'Active' ? 'Hide' : 'Show'}
+                                                                        </DropdownMenuItem>
+                                                                        <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'bestSelling')} className="gap-2 cursor-pointer">
+                                                                            <FiStar className="w-4 h-4" />
+                                                                            {product.visibility?.bestSelling ? 'Remove from Bestsellers' : 'Add to Bestsellers'}
+                                                                        </DropdownMenuItem>
+                                                                        <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'editorsPick')} className="gap-2 cursor-pointer">
+                                                                            <FiStar className="w-4 h-4" />
+                                                                            {product.visibility?.editorsPick ? "Remove from Editor's Pick" : "Add to Editor's Pick"}
+                                                                        </DropdownMenuItem>
+                                                                        <DropdownMenuItem className="gap-2 text-red-600 focus:text-red-600 cursor-pointer" onClick={() => handleDeleteClick(product)}>
+                                                                            <BiTrash className="w-4 h-4" /> Delete
+                                                                        </DropdownMenuItem>
+                                                                    </DropdownMenuContent>
+                                                                </DropdownMenu>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 ))}
@@ -370,6 +460,7 @@ const ProductManagement = () => {
                         </Collapsible>
                     ))}
                 </div>
+
 
                 {Object.keys(filteredGroupedProducts).length === 0 && (
                     <div className="text-center py-20 bg-white rounded-lg border border-gray-200">
@@ -386,5 +477,6 @@ const ProductManagement = () => {
         </div>
     );
 };
+
 
 export default ProductManagement;

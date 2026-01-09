@@ -1,7 +1,7 @@
 import { Outlet, Navigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 
-const SIDEBAR_WIDTH = "w-64";
+const SIDEBAR_WIDTH = "w-2";
 
 const AdminLayout = () => {
   const token = localStorage.getItem('token');
@@ -41,7 +41,7 @@ const AdminLayout = () => {
 
       {/* MAIN CONTENT */}
       <main
-        className={`ml-64 min-h-screen p-8 overflow-y-auto`}
+        className={`ml-2 sm:ml-64 min-h-screen p-2 pt-16 overflow-y-auto`}
       >
         <Outlet />
       </main>
