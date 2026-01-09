@@ -3,7 +3,7 @@ import MorePage from '../models/MorePage.js';
 // @desc    Get all more pages
 // @route   GET /api/more
 // @access  Public
-export const getMorePages = async (req, res, next) => {
+export const getMorePages = async (req, res, nxt) => {
   try {
     const { status } = req.query;
 
@@ -21,14 +21,14 @@ export const getMorePages = async (req, res, next) => {
       data: pages,
     });
   } catch (error) {
-    next(error);
+    return nxt(error);
   }
 };
 
 // @desc    Get single more page
 // @route   GET /api/more/:id
 // @access  Public
-export const getMorePage = async (req, res, next) => {
+export const getMorePage = async (req, res, nxt) => {
   try {
     const page = await MorePage.findById(req.params.id).populate(
       'updatedBy',
@@ -47,14 +47,14 @@ export const getMorePage = async (req, res, next) => {
       data: page,
     });
   } catch (error) {
-    next(error);
+    return nxt(error);
   }
 };
 
 // @desc    Get more page by slug
 // @route   GET /api/more/slug/:slug
 // @access  Public
-export const getMorePageBySlug = async (req, res, next) => {
+export const getMorePageBySlug = async (req, res, nxt) => {
   try {
     const page = await MorePage.findOne({ slug: req.params.slug }).populate(
       'updatedBy',
@@ -73,16 +73,23 @@ export const getMorePageBySlug = async (req, res, next) => {
       data: page,
     });
   } catch (error) {
-    next(error);
+    return nxt(error);
   }
 };
 
 // @desc    Create more page
 // @route   POST /api/more
 // @access  Private/Admin
-export const createMorePage = async (req, res, next) => {
+export const createMorePage = async (req, res, nxt) => {
   try {
-    req.body.updatedBy = req.user.id;
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'User authentication failed'
+      });
+    }
+
+    req.body.updatedBy = req.user.id || req.user._id;
 
     const page = await MorePage.create(req.body);
 
@@ -97,14 +104,14 @@ export const createMorePage = async (req, res, next) => {
         message: 'Page with this slug already exists',
       });
     }
-    next(error);
+    return nxt(error);
   }
 };
 
 // @desc    Update more page
 // @route   PUT /api/more/:id
 // @access  Private/Admin
-export const updateMorePage = async (req, res, next) => {
+export const updateMorePage = async (req, res, nxt) => {
   try {
     let page = await MorePage.findById(req.params.id);
 
@@ -115,7 +122,7 @@ export const updateMorePage = async (req, res, next) => {
       });
     }
 
-    req.body.updatedBy = req.user.id;
+    req.body.updatedBy = req.user.id || req.user._id;
 
     page = await MorePage.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -127,14 +134,14 @@ export const updateMorePage = async (req, res, next) => {
       data: page,
     });
   } catch (error) {
-    next(error);
+    return nxt(error);
   }
 };
 
 // @desc    Delete more page
 // @route   DELETE /api/more/:id
 // @access  Private/Admin
-export const deleteMorePage = async (req, res, next) => {
+export const deleteMorePage = async (req, res, nxt) => {
   try {
     const page = await MorePage.findById(req.params.id);
 
@@ -152,14 +159,14 @@ export const deleteMorePage = async (req, res, next) => {
       message: 'Page deleted successfully',
     });
   } catch (error) {
-    next(error);
+    return nxt(error);
   }
 };
 
 // @desc    Reorder more pages
 // @route   PUT /api/more/reorder
 // @access  Private/Admin
-export const reorderPages = async (req, res, next) => {
+export const reorderPages = async (req, res, nxt) => {
   try {
     const { pages } = req.body; // Array of { id, order }
 
@@ -182,6 +189,6 @@ export const reorderPages = async (req, res, next) => {
       message: 'Pages reordered successfully',
     });
   } catch (error) {
-    next(error);
+    return nxt(error);
   }
 };
