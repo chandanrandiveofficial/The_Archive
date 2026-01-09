@@ -37,7 +37,14 @@ const ProductManagement = () => {
     const [expandedYears, setExpandedYears] = useState({});
     const [products, setProducts] = useState([]);
     const [statusFilter, setStatusFilter] = useState('all');
-    const [stats, setStats] = useState({ total: 0, published: 0, hidden: 0 });
+    const [stats, setStats] = useState({
+        total: 0,
+        published: 0,
+        hidden: 0,
+        bestSellersCount: 0,
+        editorsPickCount: 0,
+        featuredProductCount: 0
+    });
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [deleteModal, setDeleteModal] = useState({ open: false, product: null });
@@ -124,6 +131,7 @@ const ProductManagement = () => {
 
             if (result.success) {
                 fetchProducts();
+                fetchStats();
             } else if (result.isLimitReached) {
                 alert(result.message);
             } else {
@@ -383,7 +391,7 @@ const ProductManagement = () => {
                                                                             <div className="flex-1 min-w-0">
                                                                                 <h4 className="text-sm font-semibold text-black mb-1">{product.name}</h4>
                                                                                 <div className="flex flex-wrap items-center gap-1">
-                                                                                    {product.visibility?.bestSelling && <Badge className="bg-yellow-100 text-yellow-700 text-[10px]">Bestseller</Badge>}
+                                                                                    {product.visibility?.bestSelling && <Badge className="bg-yellow-100 text-yellow-700 text-[10px]">Best Seller</Badge>}
                                                                                     {product.visibility?.editorsPick && <Badge className="bg-purple-100 text-purple-700 text-[10px]">Editor's Pick</Badge>}
                                                                                 </div>
                                                                             </div>
@@ -404,7 +412,7 @@ const ProductManagement = () => {
                                                                                     </DropdownMenuItem>
                                                                                     <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'bestSelling')} className="gap-2 cursor-pointer">
                                                                                         <FiStar className="w-4 h-4" />
-                                                                                        {product.visibility?.bestSelling ? 'Remove from Bestsellers' : 'Add to Bestsellers'}
+                                                                                        {product.visibility?.bestSelling ? 'Remove from Best Sellers' : 'Add to Best Sellers'}
                                                                                     </DropdownMenuItem>
                                                                                     <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'editorsPick')} className="gap-2 cursor-pointer">
                                                                                         <FiStar className="w-4 h-4" />
@@ -442,7 +450,7 @@ const ProductManagement = () => {
                                                                     <div className="flex-1 min-w-0">
                                                                         <div className="flex items-center gap-2">
                                                                             <h4 className="text-sm font-semibold text-black mb-1 truncate">{product.name}</h4>
-                                                                            {product.visibility?.bestSelling && <Badge className="bg-yellow-100 text-yellow-700 text-[10px]">Bestseller</Badge>}
+                                                                            {product.visibility?.bestSelling && <Badge className="bg-yellow-100 text-yellow-700 text-[10px]">Best Seller</Badge>}
                                                                             {product.visibility?.editorsPick && <Badge className="bg-purple-100 text-purple-700 text-[10px]">Editor's Pick</Badge>}
                                                                         </div>
                                                                         <p className="text-xs text-[#8E8E8E]">{product.category}</p>
@@ -470,7 +478,7 @@ const ProductManagement = () => {
                                                                             </DropdownMenuItem>
                                                                             <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'bestSelling')} className="gap-2 cursor-pointer">
                                                                                 <FiStar className="w-4 h-4" />
-                                                                                {product.visibility?.bestSelling ? 'Remove from Bestsellers' : 'Add to Bestsellers'}
+                                                                                {product.visibility?.bestSelling ? 'Remove from Best Sellers' : 'Add to Best Sellers'}
                                                                             </DropdownMenuItem>
                                                                             <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'editorsPick')} className="gap-2 cursor-pointer">
                                                                                 <FiStar className="w-4 h-4" />

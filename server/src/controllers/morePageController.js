@@ -3,7 +3,7 @@ import MorePage from '../models/MorePage.js';
 // @desc    Get all more pages
 // @route   GET /api/more
 // @access  Public
-export const getMorePages = async (req, res, nxt) => {
+export const getMorePages = async (req, res, next) => {
   try {
     const { status } = req.query;
 
@@ -28,7 +28,7 @@ export const getMorePages = async (req, res, nxt) => {
 // @desc    Get single more page
 // @route   GET /api/more/:id
 // @access  Public
-export const getMorePage = async (req, res, nxt) => {
+export const getMorePage = async (req, res, next) => {
   try {
     const page = await MorePage.findById(req.params.id).populate(
       'updatedBy',
@@ -54,7 +54,7 @@ export const getMorePage = async (req, res, nxt) => {
 // @desc    Get more page by slug
 // @route   GET /api/more/slug/:slug
 // @access  Public
-export const getMorePageBySlug = async (req, res, nxt) => {
+export const getMorePageBySlug = async (req, res, next) => {
   try {
     const page = await MorePage.findOne({ slug: req.params.slug }).populate(
       'updatedBy',
@@ -80,7 +80,7 @@ export const getMorePageBySlug = async (req, res, nxt) => {
 // @desc    Create more page
 // @route   POST /api/more
 // @access  Private/Admin
-export const createMorePage = async (req, res, nxt) => {
+export const createMorePage = async (req, res, next) => {
   try {
     if (!req.user) {
       return res.status(401).json({
@@ -111,7 +111,7 @@ export const createMorePage = async (req, res, nxt) => {
 // @desc    Update more page
 // @route   PUT /api/more/:id
 // @access  Private/Admin
-export const updateMorePage = async (req, res, nxt) => {
+export const updateMorePage = async (req, res, next) => {
   try {
     let page = await MorePage.findById(req.params.id);
 
@@ -141,7 +141,7 @@ export const updateMorePage = async (req, res, nxt) => {
 // @desc    Delete more page
 // @route   DELETE /api/more/:id
 // @access  Private/Admin
-export const deleteMorePage = async (req, res, nxt) => {
+export const deleteMorePage = async (req, res, next) => {
   try {
     const page = await MorePage.findById(req.params.id);
 
@@ -166,7 +166,7 @@ export const deleteMorePage = async (req, res, nxt) => {
 // @desc    Reorder more pages
 // @route   PUT /api/more/reorder
 // @access  Private/Admin
-export const reorderPages = async (req, res, nxt) => {
+export const reorderPages = async (req, res, next) => {
   try {
     const { pages } = req.body; // Array of { id, order }
 

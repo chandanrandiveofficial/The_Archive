@@ -39,11 +39,29 @@ const EditProduct = () => {
     featuredProduct: false
   });
 
+  const [bestSellersCount, setBestSellersCount] = useState(0);
+
   useEffect(() => {
     if (productId) {
       fetchProduct();
     }
+    fetchStats();
   }, [productId]);
+
+  const fetchStats = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_URL}/products/stats/summary`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const result = await response.json();
+      if (result.success) {
+        setBestSellersCount(result.data.bestSellersCount || 0);
+      }
+    } catch (err) {
+      console.error('Error fetching stats:', err);
+    }
+  };
 
   const fetchProduct = async () => {
     try {
@@ -419,17 +437,21 @@ const EditProduct = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-sm font-medium text-black">Best Selling</Label>
+                    <Label className="text-sm font-medium text-black">Best Seller</Label>
                     <p className="text-xs text-[#8E8E8E]">Highlight in popular lists</p>
                   </div>
-                  <Switch checked={formData.bestSelling} onCheckedChange={(checked) => {
-                    setFormData(prev => ({
-                      ...prev,
-                      bestSelling: checked,
-                      editorsPick: checked ? false : prev.editorsPick,
-                      featuredProduct: checked ? false : prev.featuredProduct
-                    }));
-                  }} />
+                  <Switch
+                    disabled={!formData.bestSelling && bestSellersCount >= 4}
+                    checked={formData.bestSelling}
+                    onCheckedChange={(checked) => {
+                      setFormData(prev => ({
+                        ...prev,
+                        bestSelling: checked,
+                        editorsPick: checked ? false : prev.editorsPick,
+                        featuredProduct: checked ? false : prev.featuredProduct
+                      }));
+                    }}
+                  />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiLink, FiUploadCloud, FiX } from "react-icons/fi";
 
@@ -26,6 +26,26 @@ export default function AddNewProduct() {
     editorsPick: false,
     featuredProduct: false,
   });
+
+  const [bestSellersCount, setBestSellersCount] = useState(0);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/products/stats/summary`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const result = await response.json();
+        if (result.success) {
+          setBestSellersCount(result.data.bestSellersCount || 0);
+        }
+      } catch (err) {
+        console.error('Error fetching stats:', err);
+      }
+    };
+    fetchStats();
+  }, []);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -245,8 +265,9 @@ export default function AddNewProduct() {
         <div className="space-y-6">
           <Card title="Visibility">
             <Toggle
-              label="Best Selling"
+              label="Best Seller"
               desc="Mark as popular"
+              disabled={!visibility.bestSelling && bestSellersCount >= 4}
               checked={visibility.bestSelling}
               onChange={() => setVisibility({
                 bestSelling: !visibility.bestSelling,

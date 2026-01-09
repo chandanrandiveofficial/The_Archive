@@ -248,6 +248,9 @@ export const getProductStats = async (req, res, next) => {
     const total = await Product.countDocuments();
     const published = await Product.countDocuments({ status: 'Active' });
     const hidden = await Product.countDocuments({ status: 'Hidden' });
+    const bestSellersCount = await Product.countDocuments({ 'visibility.bestSelling': true });
+    const editorsPickCount = await Product.countDocuments({ 'visibility.editorsPick': true });
+    const featuredProductCount = await Product.countDocuments({ 'visibility.featuredProduct': true });
 
     res.status(200).json({
       success: true,
@@ -255,6 +258,9 @@ export const getProductStats = async (req, res, next) => {
         total,
         published,
         hidden,
+        bestSellersCount,
+        editorsPickCount,
+        featuredProductCount,
         breakdown: stats,
       },
     });
