@@ -5,21 +5,21 @@ const products = [
   {
     id: 1,
     title: "Side Chair Wood Base",
-    price: "$895.00",
+    price: "₹95.00",
     image:
       "/sidechair.png",
   },
   {
     id: 2,
     title: "Three Seat Sofa",
-    price: "$2,450.00",
+    price: "₹,450.00",
     image:
       "https://images.unsplash.com/photo-1615874959474-d609969a20ed?q=80&w=800",
   },
   {
     id: 3,
     title: "Noguchi Table",
-    price: "$1,295.00",
+    price: "₹,295.00",
     image:
       "https://images.unsplash.com/photo-1616627561950-9f746e330187?q=80&w=800",
   },

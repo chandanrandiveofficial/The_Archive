@@ -42,7 +42,7 @@ const EditorsCuration = () => {
     return '/hero.png';
   };
 
-  const formatPrice = (price) => `$${price.toFixed(0)}`;
+  const formatPrice = (price) => `₹${price.toFixed(0)}`;
 
   const ProductCard = ({ product }) => (
     <Link to={`/product/${product._id}`} className="group cursor-pointer relative block">

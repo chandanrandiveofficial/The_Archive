@@ -434,7 +434,7 @@ const ProductManagement = () => {
                                                                             </Badge>
 
                                                                             <span className="text-base font-bold text-black">
-                                                                                ${product.price.toFixed(2)}
+                                                                                ₹{product.price.toFixed(2)}
                                                                             </span>
                                                                         </div>
                                                                     </div>
@@ -461,7 +461,7 @@ const ProductManagement = () => {
                                                                         <span className="w-2 h-2 rounded-full bg-current mr-1.5"></span>
                                                                         {product.status}
                                                                     </Badge>
-                                                                    <span className="text-base font-bold text-black min-w-[100px] text-right">${product.price.toFixed(2)}</span>
+                                                                    <span className="text-base font-bold text-black min-w-[100px] text-right">₹{product.price.toFixed(2)}</span>
                                                                     <DropdownMenu>
                                                                         <DropdownMenuTrigger asChild>
                                                                             <Button variant="ghost" size="icon" className="h-8 w-8">

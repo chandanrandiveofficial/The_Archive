@@ -83,7 +83,7 @@ const ProductDetail = () => {
     return '/hero.png';
   };
 
-  const formatPrice = (price) => `$${price?.toFixed(2) || '0.00'}`;
+  const formatPrice = (price) => `₹${price?.toFixed(2) || '0.00'}`;
 
   // Image navigation
   const images = getProductImages();

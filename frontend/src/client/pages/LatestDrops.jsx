@@ -43,7 +43,7 @@ const LatestDrops = () => {
         return '/hero.png';
     };
 
-    const formatPrice = (price) => `$${price?.toFixed(0) || '0'}`;
+    const formatPrice = (price) => `₹${price?.toFixed(0) || '0'}`;
 
     if (loading) {
         return (

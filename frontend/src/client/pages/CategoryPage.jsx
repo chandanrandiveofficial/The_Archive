@@ -90,7 +90,7 @@ const CategoryPage = () => {
     return '/hero.png';
   };
 
-  const formatPrice = (price) => `$${price?.toFixed(0) || 0}`;
+  const formatPrice = (price) => `₹${price?.toFixed(0) || 0}`;
 
   const getCurrentSortLabel = () => {
     const option = sortOptions.find(o => o.value === sortBy);

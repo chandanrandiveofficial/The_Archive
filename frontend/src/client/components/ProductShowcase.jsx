@@ -48,7 +48,7 @@ const ProductShowcase = () => {
     return '/hero.png';
   };
 
-  const formatPrice = (price) => `$${price.toFixed(0)}`;
+  const formatPrice = (price) => `₹${price.toFixed(0)}`;
 
   if (loading) {
     return (

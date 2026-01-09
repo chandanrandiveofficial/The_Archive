@@ -73,7 +73,7 @@ const Popular = () => {
     return '/hero.png';
   };
 
-  const formatPrice = (price) => `$${price.toFixed(0)}`;
+  const formatPrice = (price) => `₹${price.toFixed(0)}`;
 
   const filteredProducts = selectedCategory === 'All Products'
     ? products

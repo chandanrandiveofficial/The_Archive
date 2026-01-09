@@ -290,9 +290,9 @@ const EditProduct = () => {
                   <Input id="productLink" type="url" value={formData.productLink} onChange={(e) => handleInputChange('productLink', e.target.value)} placeholder="https://example.com/product" />
                 </div>
                 <div>
-                  <Label htmlFor="price" className="text-sm font-medium text-black mb-2 block">Price (USD)</Label>
+                  <Label htmlFor="price" className="text-sm font-medium text-black mb-2 block">Price (INR)</Label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8E8E8E]">$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8E8E8E]">₹</span>
                     <Input id="price" value={formData.price} onChange={(e) => handleInputChange('price', e.target.value)} placeholder="0.00" className="pl-7" />
                   </div>
                 </div>

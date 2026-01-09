@@ -181,7 +181,7 @@ export default function AddNewProduct() {
               <Input label="Product Link" type="url" placeholder="https://yourstore.com/product/black-vase" icon={<FiLink />} value={formData.productLink} onChange={(e) => handleInputChange('productLink', e.target.value)} />
               <Textarea label="Description" placeholder="Describe the product features..." hint="Write a few sentences about the product." value={formData.description} onChange={(e) => handleInputChange('description', e.target.value)} />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input label="Price ($)" placeholder="0.00" value={formData.price} onChange={(e) => handleInputChange('price', e.target.value)} />
+                <Input label="Price (₹)" placeholder="0.00" value={formData.price} onChange={(e) => handleInputChange('price', e.target.value)} />
               </div>
             </div>
           </Card>
