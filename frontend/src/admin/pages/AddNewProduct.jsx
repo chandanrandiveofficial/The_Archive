@@ -24,7 +24,7 @@ export default function AddNewProduct() {
   const [visibility, setVisibility] = useState({
     bestSelling: false,
     editorsPick: false,
-    bestSellers: false,
+    featuredProduct: false,
   });
 
   const handleInputChange = (field, value) => {
@@ -69,7 +69,7 @@ export default function AddNewProduct() {
           published: true,
           bestSelling: visibility.bestSelling,
           editorsPick: visibility.editorsPick,
-          bestSellers: visibility.bestSellers,
+          featuredProduct: visibility.featuredProduct,
         },
         images: images.length > 0
           ? images.map((img, i) => ({ url: img.preview, alt: `${formData.name} image ${i + 1}` }))
@@ -244,9 +244,36 @@ export default function AddNewProduct() {
 
         <div className="space-y-6">
           <Card title="Visibility">
-            <Toggle label="Best Selling" desc="Mark as popular" checked={visibility.bestSelling} onChange={() => setVisibility(prev => ({ ...prev, bestSelling: !prev.bestSelling }))} />
-            <Toggle label="Editor's Pick" desc="Featured curated item" checked={visibility.editorsPick} onChange={() => setVisibility(prev => ({ ...prev, editorsPick: !prev.editorsPick }))} />
-            <Toggle label="Best Seller's" desc="Featured curated item" checked={visibility.bestSellers} onChange={() => setVisibility(prev => ({ ...prev, bestSellers: !prev.bestSellers }))} />
+            <Toggle
+              label="Best Selling"
+              desc="Mark as popular"
+              checked={visibility.bestSelling}
+              onChange={() => setVisibility({
+                bestSelling: !visibility.bestSelling,
+                editorsPick: false,
+                featuredProduct: false
+              })}
+            />
+            <Toggle
+              label="Editor's Pick"
+              desc="Featured curated item"
+              checked={visibility.editorsPick}
+              onChange={() => setVisibility({
+                bestSelling: false,
+                editorsPick: !visibility.editorsPick,
+                featuredProduct: false
+              })}
+            />
+            <Toggle
+              label="Featured Product"
+              desc="Main showcased product"
+              checked={visibility.featuredProduct}
+              onChange={() => setVisibility({
+                bestSelling: false,
+                editorsPick: false,
+                featuredProduct: !visibility.featuredProduct
+              })}
+            />
           </Card>
 
           <Card title="Timeline Tagging">

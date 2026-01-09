@@ -121,8 +121,13 @@ const ProductManagement = () => {
                 body: JSON.stringify({ [field]: !product.visibility?.[field] })
             });
             const result = await response.json();
+
             if (result.success) {
                 fetchProducts();
+            } else if (result.isLimitReached) {
+                alert(result.message);
+            } else {
+                console.error('Error updating visibility:', result.message);
             }
         } catch (err) {
             console.error('Error updating visibility:', err);

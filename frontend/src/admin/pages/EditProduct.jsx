@@ -36,7 +36,7 @@ const EditProduct = () => {
     status: 'Active',
     bestSelling: false,
     editorsPick: false,
-    bestSellers: false
+    featuredProduct: false
   });
 
   useEffect(() => {
@@ -64,7 +64,7 @@ const EditProduct = () => {
           status: product.status || 'Active',
           bestSelling: product.visibility?.bestSelling || false,
           editorsPick: product.visibility?.editorsPick || false,
-          bestSellers: product.visibility?.bestSellers || false
+          featuredProduct: product.visibility?.featuredProduct || false
         });
 
         // Set existing images
@@ -151,7 +151,7 @@ const EditProduct = () => {
           published: formData.status === 'Active',
           bestSelling: formData.bestSelling,
           editorsPick: formData.editorsPick,
-          bestSellers: formData.bestSellers,
+          featuredProduct: formData.featuredProduct,
         },
         images: images.length > 0
           ? images.map(img => ({ url: img.url, alt: img.alt || formData.name }))
@@ -422,21 +422,42 @@ const EditProduct = () => {
                     <Label className="text-sm font-medium text-black">Best Selling</Label>
                     <p className="text-xs text-[#8E8E8E]">Highlight in popular lists</p>
                   </div>
-                  <Switch checked={formData.bestSelling} onCheckedChange={(checked) => handleInputChange('bestSelling', checked)} />
+                  <Switch checked={formData.bestSelling} onCheckedChange={(checked) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      bestSelling: checked,
+                      editorsPick: checked ? false : prev.editorsPick,
+                      featuredProduct: checked ? false : prev.featuredProduct
+                    }));
+                  }} />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
                     <Label className="text-sm font-medium text-black">Editor's Pick</Label>
                     <p className="text-xs text-[#8E8E8E]">Feature on front page</p>
                   </div>
-                  <Switch checked={formData.editorsPick} onCheckedChange={(checked) => handleInputChange('editorsPick', checked)} />
+                  <Switch checked={formData.editorsPick} onCheckedChange={(checked) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      bestSelling: checked ? false : prev.bestSelling,
+                      editorsPick: checked,
+                      featuredProduct: checked ? false : prev.featuredProduct
+                    }));
+                  }} />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-sm font-medium text-black">Best Seller's</Label>
-                    <p className="text-xs text-[#8E8E8E]">Featured curated item</p>
+                    <Label className="text-sm font-medium text-black">Featured Product</Label>
+                    <p className="text-xs text-[#8E8E8E]">Main showcased product</p>
                   </div>
-                  <Switch checked={formData.bestSellers} onCheckedChange={(checked) => handleInputChange('bestSellers', checked)} />
+                  <Switch checked={formData.featuredProduct} onCheckedChange={(checked) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      bestSelling: checked ? false : prev.bestSelling,
+                      editorsPick: checked ? false : prev.editorsPick,
+                      featuredProduct: checked
+                    }));
+                  }} />
                 </div>
               </CardContent>
             </Card>

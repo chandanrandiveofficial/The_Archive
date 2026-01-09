@@ -516,12 +516,16 @@ export const getHomepageData = async (req, res, next) => {
     const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
     // Parallel fetch all data
-    const [bestsellers, editorsPick, currentMonthProducts, prevMonthProducts, years] = await Promise.all([
+    const [bestsellers, editorsPick, featuredProducts, currentMonthProducts, prevMonthProducts, years] = await Promise.all([
       Product.find({ status: 'Active', 'visibility.bestSelling': true })
         .sort({ views: -1, createdAt: -1 })
         .limit(4)
         .select('-__v'),
       Product.find({ status: 'Active', 'visibility.editorsPick': true })
+        .sort({ createdAt: -1 })
+        .limit(4)
+        .select('-__v'),
+      Product.find({ status: 'Active', 'visibility.featuredProduct': true })
         .sort({ createdAt: -1 })
         .limit(4)
         .select('-__v'),
@@ -556,6 +560,7 @@ export const getHomepageData = async (req, res, next) => {
       data: {
         bestsellers,
         editorsPick,
+        featuredProducts,
         currentMonth: {
           year: currentYear,
           month: currentMonthName,
@@ -581,7 +586,7 @@ export const getHomepageData = async (req, res, next) => {
 // @access  Private/Admin
 export const updateProductVisibility = async (req, res, next) => {
   try {
-    const { bestSelling, editorsPick, published } = req.body;
+    const { bestSelling, editorsPick, featuredProduct, published } = req.body;
 
     const product = await Product.findById(req.params.id);
 
@@ -592,12 +597,41 @@ export const updateProductVisibility = async (req, res, next) => {
       });
     }
 
-    if (typeof bestSelling === 'boolean') {
-      product.visibility.bestSelling = bestSelling;
+    // Handle visibility flags (Best Selling, Editors Pick, Featured)
+    // Only one can be true at a time
+    if (bestSelling === true) {
+      // Check limit for bestSelling
+      const bestSellingCount = await Product.countDocuments({
+        'visibility.bestSelling': true,
+        _id: { $ne: product._id }
+      });
+
+      if (bestSellingCount >= 4) {
+        return res.status(400).json({
+          success: false,
+          isLimitReached: true,
+          message: 'Limit reached: You can only have 4 Best Sellers at a time.'
+        });
+      }
+
+      product.visibility.bestSelling = true;
+      product.visibility.editorsPick = false;
+      product.visibility.featuredProduct = false;
+    } else if (editorsPick === true) {
+      product.visibility.bestSelling = false;
+      product.visibility.editorsPick = true;
+      product.visibility.featuredProduct = false;
+    } else if (featuredProduct === true) {
+      product.visibility.bestSelling = false;
+      product.visibility.editorsPick = false;
+      product.visibility.featuredProduct = true;
+    } else {
+      // If toggling off
+      if (bestSelling === false) product.visibility.bestSelling = false;
+      if (editorsPick === false) product.visibility.editorsPick = false;
+      if (featuredProduct === false) product.visibility.featuredProduct = false;
     }
-    if (typeof editorsPick === 'boolean') {
-      product.visibility.editorsPick = editorsPick;
-    }
+
     if (typeof published === 'boolean') {
       product.visibility.published = published;
     }

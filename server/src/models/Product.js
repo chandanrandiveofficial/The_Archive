@@ -26,7 +26,7 @@ const productSchema = new mongoose.Schema(
       required: [true, 'Please add a category'],
       enum: [
         'Furniture',
-        'Accessories', 
+        'Accessories',
         'Arts',
         'Apps',
         'Agriculture',
@@ -112,6 +112,10 @@ const productSchema = new mongoose.Schema(
         default: false,
       },
       bestSellers: {
+        type: Boolean,
+        default: false,
+      },
+      featuredProduct: {
         type: Boolean,
         default: false,
       },
