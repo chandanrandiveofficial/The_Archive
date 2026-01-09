@@ -34,6 +34,7 @@ const EditProduct = () => {
     year: new Date().getFullYear().toString(),
     month: 'January',
     status: 'Active',
+    bestSellers: false,
     bestSelling: false,
     editorsPick: false,
     featuredProduct: false
@@ -80,6 +81,7 @@ const EditProduct = () => {
           year: product.year?.toString() || new Date().getFullYear().toString(),
           month: product.month || 'January',
           status: product.status || 'Active',
+          bestSellers: product.visibility?.bestSellers || false,
           bestSelling: product.visibility?.bestSelling || false,
           editorsPick: product.visibility?.editorsPick || false,
           featuredProduct: product.visibility?.featuredProduct || false
@@ -167,6 +169,7 @@ const EditProduct = () => {
         status: formData.status,
         visibility: {
           published: formData.status === 'Active',
+          bestSellers: formData.bestSellers,
           bestSelling: formData.bestSelling,
           editorsPick: formData.editorsPick,
           featuredProduct: formData.featuredProduct,
@@ -441,11 +444,30 @@ const EditProduct = () => {
                     <p className="text-xs text-[#8E8E8E]">Highlight in popular lists</p>
                   </div>
                   <Switch
-                    disabled={!formData.bestSelling && bestSellersCount >= 4}
+                    disabled={!formData.bestSellers && bestSellersCount >= 4}
+                    checked={formData.bestSellers}
+                    onCheckedChange={(checked) => {
+                      setFormData(prev => ({
+                        ...prev,
+                        bestSellers: checked,
+                        bestSelling: checked ? false : prev.bestSelling,
+                        editorsPick: checked ? false : prev.editorsPick,
+                        featuredProduct: checked ? false : prev.featuredProduct
+                      }));
+                    }}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-sm font-medium text-black">Best Selling</Label>
+                    <p className="text-xs text-[#8E8E8E]">Another popular label</p>
+                  </div>
+                  <Switch
                     checked={formData.bestSelling}
                     onCheckedChange={(checked) => {
                       setFormData(prev => ({
                         ...prev,
+                        bestSellers: checked ? false : prev.bestSellers,
                         bestSelling: checked,
                         editorsPick: checked ? false : prev.editorsPick,
                         featuredProduct: checked ? false : prev.featuredProduct
@@ -461,6 +483,7 @@ const EditProduct = () => {
                   <Switch checked={formData.editorsPick} onCheckedChange={(checked) => {
                     setFormData(prev => ({
                       ...prev,
+                      bestSellers: checked ? false : prev.bestSellers,
                       bestSelling: checked ? false : prev.bestSelling,
                       editorsPick: checked,
                       featuredProduct: checked ? false : prev.featuredProduct
@@ -475,6 +498,7 @@ const EditProduct = () => {
                   <Switch checked={formData.featuredProduct} onCheckedChange={(checked) => {
                     setFormData(prev => ({
                       ...prev,
+                      bestSellers: checked ? false : prev.bestSellers,
                       bestSelling: checked ? false : prev.bestSelling,
                       editorsPick: checked ? false : prev.editorsPick,
                       featuredProduct: checked

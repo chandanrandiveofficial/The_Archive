@@ -23,6 +23,7 @@ export default function AddNewProduct() {
 
   const [visibility, setVisibility] = useState({
     bestSelling: false,
+    bestSellers: false,
     editorsPick: false,
     featuredProduct: false,
   });
@@ -87,6 +88,7 @@ export default function AddNewProduct() {
         status: 'Active',
         visibility: {
           published: true,
+          bestSellers: visibility.bestSellers,
           bestSelling: visibility.bestSelling,
           editorsPick: visibility.editorsPick,
           featuredProduct: visibility.featuredProduct,
@@ -267,9 +269,21 @@ export default function AddNewProduct() {
             <Toggle
               label="Best Seller"
               desc="Mark as popular"
-              disabled={!visibility.bestSelling && bestSellersCount >= 4}
+              disabled={!visibility.bestSellers && bestSellersCount >= 4}
+              checked={visibility.bestSellers}
+              onChange={() => !(!visibility.bestSellers && bestSellersCount >= 4) && setVisibility({
+                bestSellers: !visibility.bestSellers,
+                bestSelling: false,
+                editorsPick: false,
+                featuredProduct: false
+              })}
+            />
+            <Toggle
+              label="Best Selling"
+              desc="Another popular tag"
               checked={visibility.bestSelling}
               onChange={() => setVisibility({
+                bestSellers: false,
                 bestSelling: !visibility.bestSelling,
                 editorsPick: false,
                 featuredProduct: false
@@ -280,6 +294,7 @@ export default function AddNewProduct() {
               desc="Featured curated item"
               checked={visibility.editorsPick}
               onChange={() => setVisibility({
+                bestSellers: false,
                 bestSelling: false,
                 editorsPick: !visibility.editorsPick,
                 featuredProduct: false
@@ -290,6 +305,7 @@ export default function AddNewProduct() {
               desc="Main showcased product"
               checked={visibility.featuredProduct}
               onChange={() => setVisibility({
+                bestSellers: false,
                 bestSelling: false,
                 editorsPick: false,
                 featuredProduct: !visibility.featuredProduct
@@ -345,9 +361,9 @@ function Textarea({ label, placeholder, hint, value, onChange }) {
   );
 }
 
-function Toggle({ label, desc, checked, onChange }) {
+function Toggle({ label, desc, checked, onChange, disabled }) {
   return (
-    <div onClick={onChange} className="flex items-center justify-between py-2 cursor-pointer select-none">
+    <div onClick={disabled ? undefined : onChange} className={`flex items-center justify-between py-2 ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} select-none`}>
       <div>
         <p className="text-sm font-medium">{label}</p>
         <p className="text-xs text-zinc-500">{desc}</p>

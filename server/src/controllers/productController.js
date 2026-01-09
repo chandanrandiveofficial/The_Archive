@@ -248,7 +248,7 @@ export const getProductStats = async (req, res, next) => {
     const total = await Product.countDocuments();
     const published = await Product.countDocuments({ status: 'Active' });
     const hidden = await Product.countDocuments({ status: 'Hidden' });
-    const bestSellersCount = await Product.countDocuments({ 'visibility.bestSelling': true });
+    const bestSellersCount = await Product.countDocuments({ 'visibility.bestSellers': true });
     const editorsPickCount = await Product.countDocuments({ 'visibility.editorsPick': true });
     const featuredProductCount = await Product.countDocuments({ 'visibility.featuredProduct': true });
 
@@ -592,7 +592,7 @@ export const getHomepageData = async (req, res, next) => {
 // @access  Private/Admin
 export const updateProductVisibility = async (req, res, next) => {
   try {
-    const { bestSelling, editorsPick, featuredProduct, published } = req.body;
+    const { bestSelling, bestSellers, editorsPick, featuredProduct, published } = req.body;
 
     const product = await Product.findById(req.params.id);
 
@@ -603,16 +603,16 @@ export const updateProductVisibility = async (req, res, next) => {
       });
     }
 
-    // Handle visibility flags (Best Selling, Editors Pick, Featured)
+    // Handle visibility flags (Best Seller, Best Selling, Editors Pick, Featured)
     // Only one can be true at a time
-    if (bestSelling === true) {
-      // Check limit for bestSelling
-      const bestSellingCount = await Product.countDocuments({
-        'visibility.bestSelling': true,
+    if (bestSellers === true) {
+      // Check limit for bestSellers
+      const bestSellersCount = await Product.countDocuments({
+        'visibility.bestSellers': true,
         _id: { $ne: product._id }
       });
 
-      if (bestSellingCount >= 4) {
+      if (bestSellersCount >= 4) {
         return res.status(400).json({
           success: false,
           isLimitReached: true,
@@ -620,19 +620,28 @@ export const updateProductVisibility = async (req, res, next) => {
         });
       }
 
+      product.visibility.bestSellers = true;
+      product.visibility.bestSelling = false;
+      product.visibility.editorsPick = false;
+      product.visibility.featuredProduct = false;
+    } else if (bestSelling === true) {
+      product.visibility.bestSellers = false;
       product.visibility.bestSelling = true;
       product.visibility.editorsPick = false;
       product.visibility.featuredProduct = false;
     } else if (editorsPick === true) {
+      product.visibility.bestSellers = false;
       product.visibility.bestSelling = false;
       product.visibility.editorsPick = true;
       product.visibility.featuredProduct = false;
     } else if (featuredProduct === true) {
+      product.visibility.bestSellers = false;
       product.visibility.bestSelling = false;
       product.visibility.editorsPick = false;
       product.visibility.featuredProduct = true;
     } else {
-      // If toggling off
+      // If toggling off specific flags
+      if (bestSellers === false) product.visibility.bestSellers = false;
       if (bestSelling === false) product.visibility.bestSelling = false;
       if (editorsPick === false) product.visibility.editorsPick = false;
       if (featuredProduct === false) product.visibility.featuredProduct = false;
