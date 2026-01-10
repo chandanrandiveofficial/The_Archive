@@ -21,7 +21,7 @@ export const getMorePages = async (req, res, next) => {
       data: pages,
     });
   } catch (error) {
-    return nxt(error);
+    return next(error);
   }
 };
 
@@ -47,7 +47,7 @@ export const getMorePage = async (req, res, next) => {
       data: page,
     });
   } catch (error) {
-    return nxt(error);
+    return next(error);
   }
 };
 
@@ -73,7 +73,7 @@ export const getMorePageBySlug = async (req, res, next) => {
       data: page,
     });
   } catch (error) {
-    return nxt(error);
+    return next(error);
   }
 };
 
@@ -104,7 +104,7 @@ export const createMorePage = async (req, res, next) => {
         message: 'Page with this slug already exists',
       });
     }
-    return nxt(error);
+    return next(error);
   }
 };
 
@@ -134,7 +134,7 @@ export const updateMorePage = async (req, res, next) => {
       data: page,
     });
   } catch (error) {
-    return nxt(error);
+    return next(error);
   }
 };
 
@@ -159,7 +159,7 @@ export const deleteMorePage = async (req, res, next) => {
       message: 'Page deleted successfully',
     });
   } catch (error) {
-    return nxt(error);
+    return next(error);
   }
 };
 
@@ -189,6 +189,6 @@ export const reorderPages = async (req, res, next) => {
       message: 'Pages reordered successfully',
     });
   } catch (error) {
-    return nxt(error);
+    return next(error);
   }
 };
