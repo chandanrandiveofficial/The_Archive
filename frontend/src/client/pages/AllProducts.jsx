@@ -107,7 +107,7 @@ const AllProducts = () => {
   const ProductCard = ({ product }) => (
     <Link to={`/product/${product._id}`} className="group cursor-pointer block">
       <div className="bg-gray-100 rounded-lg aspect-square mb-3 overflow-hidden flex items-center justify-center">
-        <img src={getImageUrl(product)} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+        <img src={getImageUrl(product)} alt={product.name} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" />
       </div>
       <div className="space-y-1">
         <h3 className="font-medium text-sm group-hover:text-gray-600 transition-colors">{product.name}</h3>

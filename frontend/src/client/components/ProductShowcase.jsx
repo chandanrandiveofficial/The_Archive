@@ -88,7 +88,7 @@ const ProductShowcase = () => {
               {data.bestsellers.map((product) => (
                 <Link key={product._id} to={`/product/${product._id}`} className="group block">
                   <div className="bg-[#F4F4F4] aspect-[4/3] overflow-hidden mb-3 flex items-center justify-center">
-                    <img src={getImageUrl(product)} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <img src={getImageUrl(product)} alt={product.name} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                   </div>
                   <div className="flex justify-between items-start">
                     <div>
@@ -112,7 +112,7 @@ const ProductShowcase = () => {
                 <Link key={product._id} to={`/product/${product._id}`} className="group block relative">
                   <div className="absolute top-3 left-3 z-10 bg-black text-white text-[10px] font-semibold px-2 py-1 rounded">EDITOR'S PICK</div>
                   <div className="bg-[#F4F4F4] aspect-square overflow-hidden mb-3 flex items-center justify-center">
-                    <img src={getImageUrl(product)} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <img src={getImageUrl(product)} alt={product.name} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                   </div>
                   <div className="flex justify-between items-start">
                     <div>
@@ -141,7 +141,7 @@ const ProductShowcase = () => {
               {data.currentMonth.products.map((product) => (
                 <Link key={product._id} to={`/product/${product._id}`} className="group block">
                   <div className="bg-[#F4F4F4] aspect-square overflow-hidden mb-3 flex items-center justify-center">
-                    <img src={getImageUrl(product)} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <img src={getImageUrl(product)} alt={product.name} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-black mb-0.5">{product.name}</h3>
@@ -167,7 +167,7 @@ const ProductShowcase = () => {
               {data.previousMonth.products.map((product) => (
                 <Link key={product._id} to={`/product/${product._id}`} className="group block">
                   <div className="bg-[#F4F4F4] aspect-square overflow-hidden mb-3 flex items-center justify-center">
-                    <img src={getImageUrl(product)} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <img src={getImageUrl(product)} alt={product.name} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-black mb-0.5">{product.name}</h3>
@@ -190,7 +190,7 @@ const ProductShowcase = () => {
               {yearData.products.map((product) => (
                 <Link key={product._id} to={`/product/${product._id}`} className="group block">
                   <div className="bg-[#F4F4F4] aspect-square overflow-hidden mb-3 flex items-center justify-center">
-                    <img src={getImageUrl(product)} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <img src={getImageUrl(product)} alt={product.name} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                   </div>
                   <div>
                     <h3 className="text-base font-semibold text-black mb-0.5">{product.name}</h3>

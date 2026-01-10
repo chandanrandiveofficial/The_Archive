@@ -144,13 +144,13 @@ const Popular = () => {
             <div className="grid lg:grid-cols-2 gap-8 mb-12">
               <Link to={`/product/${featuredProduct._id}`} className="group relative">
                 <div className="absolute top-4 left-4 z-10 bg-black text-white text-xs font-semibold px-3 py-1.5 rounded">
-                  FEATURED
+                  {featuredProduct.visibility?.popularFeatured ? '⭐ POPULAR FEATURED' : 'FEATURED'}
                 </div>
                 <div className="bg-[#E8E8E8] aspect-[4/3] overflow-hidden flex items-center justify-center">
                   <img
                     src={getImageUrl(featuredProduct)}
                     alt={featuredProduct.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
               </Link>
@@ -185,7 +185,7 @@ const Popular = () => {
                   <img
                     src={getImageUrl(product)}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
                 <div>
