@@ -522,8 +522,8 @@ export const getHomepageData = async (req, res, next) => {
     const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
     // Parallel fetch all data
-    const [bestsellers, editorsPick, featuredProducts, currentMonthProducts, prevMonthProducts, years] = await Promise.all([
-      Product.find({ status: 'Active', 'visibility.bestSelling': true })
+    const [mainShowcase, editorsPick, popularProducts, currentMonthProducts, prevMonthProducts, years] = await Promise.all([
+      Product.find({ status: 'Active', 'visibility.bestSellers': true })
         .sort({ views: -1, createdAt: -1 })
         .limit(4)
         .select('-__v'),
@@ -531,7 +531,7 @@ export const getHomepageData = async (req, res, next) => {
         .sort({ createdAt: -1 })
         .limit(4)
         .select('-__v'),
-      Product.find({ status: 'Active', 'visibility.featuredProduct': true })
+      Product.find({ status: 'Active', 'visibility.bestSelling': true })
         .sort({ createdAt: -1 })
         .limit(4)
         .select('-__v'),
@@ -564,9 +564,9 @@ export const getHomepageData = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: {
-        bestsellers,
+        bestsellers: mainShowcase,
         editorsPick,
-        featuredProducts,
+        popularProducts,
         currentMonth: {
           year: currentYear,
           month: currentMonthName,

@@ -273,8 +273,8 @@ export default function AddNewProduct() {
         <div className="space-y-6">
           <Card title="Visibility">
             <Toggle
-              label="Best Seller"
-              desc="Mark as popular"
+              label="Main Showcase"
+              desc="Show in landing page (Max 4)"
               disabled={!visibility.bestSellers && bestSellersCount >= 4}
               checked={visibility.bestSellers}
               onChange={() => !(!visibility.bestSellers && bestSellersCount >= 4) && setVisibility({
@@ -285,8 +285,8 @@ export default function AddNewProduct() {
               })}
             />
             <Toggle
-              label="Best Selling"
-              desc="Another popular tag"
+              label="Popular"
+              desc="Show in popular section"
               checked={visibility.bestSelling}
               onChange={() => setVisibility({
                 bestSellers: false,
@@ -304,17 +304,6 @@ export default function AddNewProduct() {
                 bestSelling: false,
                 editorsPick: !visibility.editorsPick,
                 featuredProduct: false
-              })}
-            />
-            <Toggle
-              label="Featured Product"
-              desc="Main showcased product"
-              checked={visibility.featuredProduct}
-              onChange={() => setVisibility({
-                bestSellers: false,
-                bestSelling: false,
-                editorsPick: false,
-                featuredProduct: !visibility.featuredProduct
               })}
             />
           </Card>

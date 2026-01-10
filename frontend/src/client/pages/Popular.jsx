@@ -107,7 +107,7 @@ const Popular = () => {
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-3">Most Desired</h1>
+          <h1 className="text-4xl font-bold mb-3">Popular</h1>
           <p className="text-gray-600 max-w-2xl">
             Explore the items our clients are loving right now. A curated selection of top-tier designs that define modern aesthetics.
           </p>
@@ -135,7 +135,7 @@ const Popular = () => {
         </div>
 
         <div className="space-y-8">
-          {selectedCategory === 'All Products' && featuredProduct && (
+          {featuredProduct && (
             <div className="grid lg:grid-cols-2 gap-8 mb-12">
               <Link to={`/product/${featuredProduct._id}`} className="group relative">
                 <div className="absolute top-4 left-4 z-10 bg-black text-white text-xs font-semibold px-3 py-1.5 rounded">
@@ -173,7 +173,7 @@ const Popular = () => {
               <Link key={product._id} to={`/product/${product._id}`} className="group relative">
                 {product.visibility?.bestSelling && (
                   <div className="absolute top-3 left-3 z-10 bg-black text-white text-[10px] font-semibold px-2 py-1 rounded">
-                    BEST SELLER
+                    POPULAR
                   </div>
                 )}
                 <div className="bg-[#F4F4F4] aspect-square overflow-hidden mb-3 flex items-center justify-center">

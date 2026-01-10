@@ -440,8 +440,8 @@ const EditProduct = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-sm font-medium text-black">Best Seller</Label>
-                    <p className="text-xs text-[#8E8E8E]">Highlight in popular lists</p>
+                    <Label className="text-sm font-medium text-black">Main Showcase</Label>
+                    <p className="text-xs text-[#8E8E8E]">Show in landing page (Max 4)</p>
                   </div>
                   <Switch
                     disabled={!formData.bestSellers && bestSellersCount >= 4}
@@ -459,8 +459,8 @@ const EditProduct = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-sm font-medium text-black">Best Selling</Label>
-                    <p className="text-xs text-[#8E8E8E]">Another popular label</p>
+                    <Label className="text-sm font-medium text-black">Popular</Label>
+                    <p className="text-xs text-[#8E8E8E]">Show in popular section</p>
                   </div>
                   <Switch
                     checked={formData.bestSelling}
@@ -487,21 +487,6 @@ const EditProduct = () => {
                       bestSelling: checked ? false : prev.bestSelling,
                       editorsPick: checked,
                       featuredProduct: checked ? false : prev.featuredProduct
-                    }));
-                  }} />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label className="text-sm font-medium text-black">Featured Product</Label>
-                    <p className="text-xs text-[#8E8E8E]">Main showcased product</p>
-                  </div>
-                  <Switch checked={formData.featuredProduct} onCheckedChange={(checked) => {
-                    setFormData(prev => ({
-                      ...prev,
-                      bestSellers: checked ? false : prev.bestSellers,
-                      bestSelling: checked ? false : prev.bestSelling,
-                      editorsPick: checked ? false : prev.editorsPick,
-                      featuredProduct: checked
                     }));
                   }} />
                 </div>
