@@ -78,39 +78,53 @@ export const getMorePageBySlug = async (req, res, next) => {
 // @desc    Create more page
 // @route   POST /api/more
 // @access  Private/Admin
-export const createMorePage = async (req, res, next) => {
+export const createMorePage = async (req, res) => {
   try {
-    console.log('Creating more page with body:', req.body);
+    console.log('API: Creating more page', req.body.title);
+
     if (!req.user) {
-      console.log('User not found in request');
       return res.status(401).json({
         success: false,
-        message: 'User authentication failed'
+        message: 'Not authorized'
       });
     }
 
-    req.body.updatedBy = req.user._id || req.user.id;
+    const { title, content, status } = req.body;
 
-    const page = await MorePage.create(req.body);
-    console.log('Page created successfully:', page._id);
+    if (!title || !content) {
+      return res.status(400).json({
+        success: false,
+        message: 'Title and content are required'
+      });
+    }
+
+    const pageData = {
+      title,
+      content,
+      status: status || 'DRAFT',
+      updatedBy: req.user._id
+    };
+
+    const page = await MorePage.create(pageData);
 
     res.status(201).json({
       success: true,
       data: page,
     });
   } catch (error) {
-    console.error('Error in createMorePage:', error);
+    console.error('Error creating more page:', error);
+
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
-        message: 'Page with this slug/title already exists',
+        message: 'A page with this title/slug already exists'
       });
     }
-    // Return the error message and stack for debugging
+
     res.status(500).json({
       success: false,
-      message: error.message,
-      stack: error.stack
+      message: error.message || 'Internal Server Error',
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 };

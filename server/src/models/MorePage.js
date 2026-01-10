@@ -37,20 +37,14 @@ const morePageSchema = new mongoose.Schema(
 );
 
 // Create slug from title before saving
-morePageSchema.pre('save', function (next) {
-  try {
-    if (this.isModified('title') && !this.slug) {
-      this.slug = this.title
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .trim();
-    }
-    next();
-  } catch (err) {
-    console.error('Error in MorePage pre-save hook:', err);
-    next(err);
+morePageSchema.pre('save', async function () {
+  if (this.isModified('title') && !this.slug) {
+    this.slug = this.title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
   }
 });
 

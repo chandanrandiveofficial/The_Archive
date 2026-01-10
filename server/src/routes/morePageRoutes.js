@@ -30,7 +30,7 @@ router.get('/slug/:slug', getMorePageBySlug);
 router.get('/:id', getMorePage);
 
 // Protected admin routes
-router.post('/', protect, admin, morePageValidation, validate, createMorePage);
+router.post('/', protect, admin, ...morePageValidation, validate, createMorePage);
 router.put('/:id', protect, admin, updateMorePage);
 router.delete('/:id', protect, admin, deleteMorePage);
 router.put('/reorder/bulk', protect, admin, reorderPages);
