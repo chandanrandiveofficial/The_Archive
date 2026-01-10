@@ -400,6 +400,7 @@ const ProductManagement = () => {
                                                                                     {product.visibility?.bestSellers && <Badge className="bg-yellow-100 text-yellow-700 text-[10px]">Showcase</Badge>}
                                                                                     {product.visibility?.bestSelling && <Badge className="bg-orange-100 text-orange-700 text-[10px]">Popular</Badge>}
                                                                                     {product.visibility?.editorsPick && <Badge className="bg-purple-100 text-purple-700 text-[10px]">Editor's Pick</Badge>}
+                                                                                    {product.visibility?.popularFeatured && <Badge className="bg-pink-100 text-pink-700 text-[10px]">⭐ Popular Featured</Badge>}
                                                                                 </div>
                                                                             </div>
                                                                             {/* Actions Menu - Mobile */}
@@ -432,6 +433,10 @@ const ProductManagement = () => {
                                                                                     <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'editorsPick')} className="gap-2 cursor-pointer">
                                                                                         <FiStar className="w-4 h-4" />
                                                                                         {product.visibility?.editorsPick ? "Remove from Editor's Pick" : "Add to Editor's Pick"}
+                                                                                    </DropdownMenuItem>
+                                                                                    <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'popularFeatured')} className="gap-2 cursor-pointer">
+                                                                                        <FiStar className="w-4 h-4" />
+                                                                                        {product.visibility?.popularFeatured ? "Remove Popular Featured" : "Set as Popular Featured"}
                                                                                     </DropdownMenuItem>
                                                                                     <DropdownMenuItem className="gap-2 text-red-600 focus:text-red-600 cursor-pointer" onClick={() => handleDeleteClick(product)}>
                                                                                         <BiTrash className="w-4 h-4" /> Delete
@@ -468,6 +473,7 @@ const ProductManagement = () => {
                                                                             {product.visibility?.bestSellers && <Badge className="bg-yellow-100 text-yellow-700 text-[10px]">Showcase</Badge>}
                                                                             {product.visibility?.bestSelling && <Badge className="bg-orange-100 text-orange-700 text-[10px]">Popular</Badge>}
                                                                             {product.visibility?.editorsPick && <Badge className="bg-purple-100 text-purple-700 text-[10px]">Editor's Pick</Badge>}
+                                                                            {product.visibility?.popularFeatured && <Badge className="bg-pink-100 text-pink-700 text-[10px]">⭐ Popular Featured</Badge>}
                                                                         </div>
                                                                         <p className="text-xs text-[#8E8E8E]">{product.category}</p>
                                                                     </div>
@@ -507,6 +513,10 @@ const ProductManagement = () => {
                                                                             <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'editorsPick')} className="gap-2 cursor-pointer">
                                                                                 <FiStar className="w-4 h-4" />
                                                                                 {product.visibility?.editorsPick ? "Remove from Editor's Pick" : "Add to Editor's Pick"}
+                                                                            </DropdownMenuItem>
+                                                                            <DropdownMenuItem onClick={() => handleToggleVisibility(product, 'popularFeatured')} className="gap-2 cursor-pointer">
+                                                                                <FiStar className="w-4 h-4" />
+                                                                                {product.visibility?.popularFeatured ? "Remove Popular Featured" : "Set as Popular Featured"}
                                                                             </DropdownMenuItem>
                                                                             <DropdownMenuItem className="gap-2 text-red-600 focus:text-red-600 cursor-pointer" onClick={() => handleDeleteClick(product)}>
                                                                                 <BiTrash className="w-4 h-4" /> Delete

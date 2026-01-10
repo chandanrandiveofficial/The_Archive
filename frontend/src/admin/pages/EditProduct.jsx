@@ -84,7 +84,8 @@ const EditProduct = () => {
           bestSellers: product.visibility?.bestSellers || false,
           bestSelling: product.visibility?.bestSelling || false,
           editorsPick: product.visibility?.editorsPick || false,
-          featuredProduct: product.visibility?.featuredProduct || false
+          featuredProduct: product.visibility?.featuredProduct || false,
+          popularFeatured: product.visibility?.popularFeatured || false
         });
 
         // Set existing images
@@ -173,6 +174,7 @@ const EditProduct = () => {
           bestSelling: formData.bestSelling,
           editorsPick: formData.editorsPick,
           featuredProduct: formData.featuredProduct,
+          popularFeatured: formData.popularFeatured,
         },
         images: images.length > 0
           ? images.map(img => ({ url: img.url, alt: img.alt || formData.name }))
@@ -487,6 +489,18 @@ const EditProduct = () => {
                       bestSelling: checked ? false : prev.bestSelling,
                       editorsPick: checked,
                       featuredProduct: checked ? false : prev.featuredProduct
+                    }));
+                  }} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-sm font-medium text-black">⭐ Popular Featured</Label>
+                    <p className="text-xs text-[#8E8E8E]">Big featured spot on Popular page (Only 1)</p>
+                  </div>
+                  <Switch checked={formData.popularFeatured} onCheckedChange={(checked) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      popularFeatured: checked
                     }));
                   }} />
                 </div>

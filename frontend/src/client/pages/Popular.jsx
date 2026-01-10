@@ -39,6 +39,8 @@ const Popular = () => {
     'Decor'
   ];
 
+  const [popularFeatured, setPopularFeatured] = useState(null);
+
   useEffect(() => {
     fetchBestsellers();
   }, []);
@@ -51,6 +53,7 @@ const Popular = () => {
 
       if (result.success) {
         setProducts(result.data);
+        setPopularFeatured(result.popularFeatured || null);
       } else {
         setError('Failed to load products');
       }
@@ -79,8 +82,10 @@ const Popular = () => {
     ? products
     : products.filter(p => p.category === selectedCategory);
 
-  const featuredProduct = filteredProducts[0];
-  const gridProducts = filteredProducts.slice(1);
+  // Use the admin-selected popularFeatured product if available, otherwise fall back to first product
+  const featuredProduct = popularFeatured || filteredProducts[0];
+  // Exclude the featured product from the grid
+  const gridProducts = filteredProducts.filter(p => p._id !== featuredProduct?._id);
 
   if (loading) {
     return (

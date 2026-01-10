@@ -340,12 +340,24 @@ export const getRelatedProducts = async (req, res, next) => {
 // @access  Public
 export const getBestsellers = async (req, res, next) => {
   try {
-    const { limit = 4 } = req.query;
+    const { limit = 50 } = req.query;
 
-    const products = await Product.find({
+    // Fetch the popularFeatured product (only one allowed)
+    const popularFeatured = await Product.findOne({
+      status: 'Active',
+      'visibility.popularFeatured': true,
+    }).select('-__v');
+
+    // Fetch bestSelling products (excluding the popularFeatured if exists)
+    const query = {
       status: 'Active',
       'visibility.bestSelling': true,
-    })
+    };
+    if (popularFeatured) {
+      query._id = { $ne: popularFeatured._id };
+    }
+
+    const products = await Product.find(query)
       .sort({ views: -1, createdAt: -1 })
       .limit(parseInt(limit))
       .select('-__v');
@@ -353,6 +365,7 @@ export const getBestsellers = async (req, res, next) => {
     res.status(200).json({
       success: true,
       count: products.length,
+      popularFeatured: popularFeatured || null,
       data: products,
     });
   } catch (error) {
@@ -592,7 +605,7 @@ export const getHomepageData = async (req, res, next) => {
 // @access  Private/Admin
 export const updateProductVisibility = async (req, res, next) => {
   try {
-    const { bestSelling, bestSellers, editorsPick, featuredProduct, published } = req.body;
+    const { bestSelling, bestSellers, editorsPick, featuredProduct, popularFeatured, published } = req.body;
 
     const product = await Product.findById(req.params.id);
 
@@ -603,7 +616,19 @@ export const updateProductVisibility = async (req, res, next) => {
       });
     }
 
-    // Handle visibility flags (Best Seller, Best Selling, Editors Pick, Featured)
+    // Handle popularFeatured separately - only ONE product can have this
+    if (popularFeatured === true) {
+      // Remove popularFeatured from ANY other product first
+      await Product.updateMany(
+        { 'visibility.popularFeatured': true, _id: { $ne: product._id } },
+        { $set: { 'visibility.popularFeatured': false } }
+      );
+      product.visibility.popularFeatured = true;
+    } else if (popularFeatured === false) {
+      product.visibility.popularFeatured = false;
+    }
+
+    // Handle other visibility flags (Best Seller, Best Selling, Editors Pick, Featured)
     // Only one can be true at a time
     if (bestSellers === true) {
       // Check limit for bestSellers
@@ -616,7 +641,7 @@ export const updateProductVisibility = async (req, res, next) => {
         return res.status(400).json({
           success: false,
           isLimitReached: true,
-          message: 'Limit reached: You can only have 4 Best Sellers at a time.'
+          message: 'Limit reached: You can only have 4 Main Showcase products at a time.'
         });
       }
 

@@ -26,6 +26,7 @@ export default function AddNewProduct() {
     bestSellers: false,
     editorsPick: false,
     featuredProduct: false,
+    popularFeatured: false,
   });
 
   const [bestSellersCount, setBestSellersCount] = useState(0);
@@ -96,6 +97,7 @@ export default function AddNewProduct() {
           bestSelling: visibility.bestSelling,
           editorsPick: visibility.editorsPick,
           featuredProduct: visibility.featuredProduct,
+          popularFeatured: visibility.popularFeatured,
         },
         images: images.length > 0
           ? images.map((img, i) => ({ url: img.preview, alt: `${formData.name} image ${i + 1}` }))
@@ -278,6 +280,7 @@ export default function AddNewProduct() {
               disabled={!visibility.bestSellers && bestSellersCount >= 4}
               checked={visibility.bestSellers}
               onChange={() => !(!visibility.bestSellers && bestSellersCount >= 4) && setVisibility({
+                ...visibility,
                 bestSellers: !visibility.bestSellers,
                 bestSelling: false,
                 editorsPick: false,
@@ -289,6 +292,7 @@ export default function AddNewProduct() {
               desc="Show in popular section"
               checked={visibility.bestSelling}
               onChange={() => setVisibility({
+                ...visibility,
                 bestSellers: false,
                 bestSelling: !visibility.bestSelling,
                 editorsPick: false,
@@ -300,10 +304,20 @@ export default function AddNewProduct() {
               desc="Featured curated item"
               checked={visibility.editorsPick}
               onChange={() => setVisibility({
+                ...visibility,
                 bestSellers: false,
                 bestSelling: false,
                 editorsPick: !visibility.editorsPick,
                 featuredProduct: false
+              })}
+            />
+            <Toggle
+              label="⭐ Popular Featured"
+              desc="Big featured spot on Popular page (Only 1)"
+              checked={visibility.popularFeatured}
+              onChange={() => setVisibility({
+                ...visibility,
+                popularFeatured: !visibility.popularFeatured
               })}
             />
           </Card>

@@ -119,6 +119,10 @@ const productSchema = new mongoose.Schema(
         type: Boolean,
         default: false,
       },
+      popularFeatured: {
+        type: Boolean,
+        default: false,
+      },
     },
     tags: [
       {
