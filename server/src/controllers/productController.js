@@ -358,7 +358,7 @@ export const getBestsellers = async (req, res, next) => {
     }
 
     const products = await Product.find(query)
-      .sort({ views: -1, createdAt: -1 })
+      .sort({ createdAt: -1, _id: -1 })
       .limit(parseInt(limit))
       .select('-__v');
 
