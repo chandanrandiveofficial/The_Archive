@@ -95,6 +95,7 @@ export const getProductTimeline = async (req, res, next) => {
 
     const timeline = await Product.aggregate([
       { $match: { status } },
+      { $sort: { createdAt: -1, _id: -1 } }, // Sort by newest first before grouping
       {
         $group: {
           _id: { year: '$year', month: '$month' },
