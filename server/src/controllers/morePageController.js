@@ -80,29 +80,38 @@ export const getMorePageBySlug = async (req, res, next) => {
 // @access  Private/Admin
 export const createMorePage = async (req, res, next) => {
   try {
+    console.log('Creating more page with body:', req.body);
     if (!req.user) {
+      console.log('User not found in request');
       return res.status(401).json({
         success: false,
         message: 'User authentication failed'
       });
     }
 
-    req.body.updatedBy = req.user.id || req.user._id;
+    req.body.updatedBy = req.user._id || req.user.id;
 
     const page = await MorePage.create(req.body);
+    console.log('Page created successfully:', page._id);
 
     res.status(201).json({
       success: true,
       data: page,
     });
   } catch (error) {
+    console.error('Error in createMorePage:', error);
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
         message: 'Page with this slug/title already exists',
       });
     }
-    next(error);
+    // Return the error message and stack for debugging
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      stack: error.stack
+    });
   }
 };
 
