@@ -430,23 +430,23 @@ export const getMonthlyCollections = async (req, res, next) => {
     const prevMonthName = months[prevMonth];
     const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
-    // Fetch current month products
+    // Fetch current month products - sorted by newest first
     const currentMonthProducts = await Product.find({
       status: 'Active',
       year: currentYear,
       month: currentMonthName,
     })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1, _id: -1 })
       .limit(parseInt(limit))
       .select('-__v');
 
-    // Fetch previous month products
+    // Fetch previous month products - sorted by newest first
     const prevMonthProducts = await Product.find({
       status: 'Active',
       year: prevMonthYear,
       month: prevMonthName,
     })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1, _id: -1 })
       .limit(parseInt(limit))
       .select('-__v');
 
@@ -490,7 +490,7 @@ export const getYearlyCollections = async (req, res, next) => {
         status: 'Active',
         year: year,
       })
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: -1, _id: -1 })
         .limit(parseInt(limit))
         .select('-__v');
 
@@ -534,26 +534,26 @@ export const getHomepageData = async (req, res, next) => {
     const prevMonthName = months[prevMonth];
     const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
-    // Parallel fetch all data
+    // Parallel fetch all data - sorted by newest first
     const [mainShowcase, editorsPick, popularProducts, currentMonthProducts, prevMonthProducts, years] = await Promise.all([
       Product.find({ status: 'Active', 'visibility.bestSellers': true })
-        .sort({ views: -1, createdAt: -1 })
+        .sort({ views: -1, createdAt: -1, _id: -1 })
         .limit(4)
         .select('-__v'),
       Product.find({ status: 'Active', 'visibility.editorsPick': true })
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: -1, _id: -1 })
         .limit(4)
         .select('-__v'),
       Product.find({ status: 'Active', 'visibility.bestSelling': true })
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: -1, _id: -1 })
         .limit(4)
         .select('-__v'),
       Product.find({ status: 'Active', year: currentYear, month: currentMonthName })
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: -1, _id: -1 })
         .limit(4)
         .select('-__v'),
       Product.find({ status: 'Active', year: prevMonthYear, month: prevMonthName })
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: -1, _id: -1 })
         .limit(4)
         .select('-__v'),
       Product.distinct('year', { status: 'Active' }),
@@ -566,7 +566,7 @@ export const getHomepageData = async (req, res, next) => {
     for (const year of years.slice(0, 3)) {
       if (year < currentYear) { // Exclude current year as it's shown in monthly
         const products = await Product.find({ status: 'Active', year })
-          .sort({ createdAt: -1 })
+          .sort({ createdAt: -1, _id: -1 })
           .limit(4)
           .select('-__v');
 
