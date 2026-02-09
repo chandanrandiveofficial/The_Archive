@@ -175,7 +175,7 @@ const ProductManagement = () => {
     // Group products by year and month
     const groupedProducts = products.reduce((acc, product) => {
         const year = product.year;
-        const month = `${product.month.toUpperCase()} ${year}`;
+        const month = `${(product.month || 'Unknown').toUpperCase()} ${year}`;
 
 
         if (!acc[year]) {

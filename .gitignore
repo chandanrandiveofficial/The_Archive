@@ -47,3 +47,6 @@ coverage/
 # Temporary files
 tmp/
 temp/
+
+# Documentation scripts
+BACKEND_EXPLANATION_SCRIPT.md
